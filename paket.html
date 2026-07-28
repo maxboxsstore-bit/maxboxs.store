@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paket &amp; Kurir — MAXBOXS.STORE</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.10.5/sweetalert2.all.min.js"></script>
+<style>
+:root{
+  --mb-blue:#1957e0; --mb-blue-dark:#0f3fae; --mb-blue-light:#eaf1ff;
+  --mb-ink:#10182c; --mb-ink-soft:#5b6478; --mb-line:#e7ebf3; --mb-bg:#f6f8fc; --mb-white:#fff;
+  --mb-green:#17a673; --mb-amber:#e79a1a; --mb-red:#e14848; --mb-purple:#8b5cf6;
+  --radius:14px; --shadow:0 4px 22px rgba(16,24,44,.06);
+}
+[data-theme="dark"]{
+  --mb-blue:#4d84ff; --mb-blue-dark:#3a6ce0; --mb-blue-light:#16233f;
+  --mb-ink:#eef2fb; --mb-ink-soft:#9aa6c2; --mb-line:#232f4a; --mb-bg:#0b1120; --mb-white:#121a2e;
+  --shadow:0 4px 22px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box;}
+body{ font-family:'Plus Jakarta Sans',sans-serif; background:var(--mb-bg); color:var(--mb-ink); transition:background .25s,color .25s; }
+h1,h2,h3,h4,.brand-font{ font-family:'Sora',sans-serif; }
+
+.mb-shell{ display:flex; min-height:100vh; }
+.mb-sidebar{ width:250px; flex-shrink:0; background:var(--mb-white); border-right:1px solid var(--mb-line); padding:22px 16px; position:fixed; top:0; bottom:0; left:0; overflow-y:auto; z-index:1040; transition:transform .25s, background .25s; }
+.mb-brand{ display:flex; align-items:center; gap:10px; padding:6px 10px 20px; text-decoration:none; color:inherit; }
+.mb-brand-icon{ width:40px; height:40px; border-radius:11px; background:linear-gradient(135deg,var(--mb-blue),var(--mb-blue-dark)); display:flex; align-items:center; justify-content:center; overflow:hidden; flex-shrink:0; }
+.mb-brand-icon img{ width:100%; height:100%; object-fit:contain; background:#fff; padding:3px; }
+.mb-brand-icon i{ color:#fff; font-size:17px; }
+.mb-brand b{ display:block; font-size:14.5px; }
+.mb-brand span{ font-size:10.5px; color:var(--mb-ink-soft); }
+
+.mb-nav .nav-link{ display:flex; align-items:center; gap:11px; color:var(--mb-ink-soft); font-weight:600; font-size:14px; padding:10px 13px; border-radius:10px; margin-bottom:4px; cursor:pointer; }
+.mb-nav .nav-link i{ width:18px; text-align:center; font-size:14px; }
+.mb-nav .nav-link:hover{ background:var(--mb-blue-light); color:var(--mb-blue); }
+.mb-nav .nav-link.active{ background:linear-gradient(135deg,var(--mb-blue),var(--mb-blue-dark)); color:#fff; }
+.mb-nav-divider{ font-size:10.5px; text-transform:uppercase; letter-spacing:.5px; color:var(--mb-ink-soft); font-weight:700; margin:16px 10px 8px; }
+
+.mb-main{ margin-left:250px; flex:1; min-width:0; padding:20px 24px 60px; }
+.mb-topbar{ display:flex; align-items:center; justify-content:space-between; background:var(--mb-white); border:1px solid var(--mb-line); border-radius:var(--radius); padding:13px 18px; margin-bottom:20px; box-shadow:var(--shadow); }
+.mb-page{ display:none; animation:fadeIn .3s ease; } .mb-page.active{ display:block; }
+@keyframes fadeIn{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
+
+.mb-card{ background:var(--mb-white); border:1px solid var(--mb-line); border-radius:var(--radius); box-shadow:var(--shadow); }
+.mb-stat{ background:var(--mb-white); border:1px solid var(--mb-line); border-radius:var(--radius); padding:18px; box-shadow:var(--shadow); cursor:pointer; transition:transform .1s ease; }
+.mb-stat:hover{ transform:translateY(-2px); }
+.mb-stat .ic{ width:42px; height:42px; border-radius:11px; display:flex; align-items:center; justify-content:center; font-size:17px; color:#fff; margin-bottom:12px; }
+.mb-stat h3{ font-size:21px; margin:0; font-weight:800; }
+.mb-stat p{ margin:2px 0 0; color:var(--mb-ink-soft); font-size:12.5px; font-weight:600; }
+
+.section-title{ font-weight:800; font-size:18px; margin-bottom:2px; }
+.section-sub{ color:var(--mb-ink-soft); font-size:13px; margin-bottom:16px; }
+
+.table thead th{ font-size:11.5px; text-transform:uppercase; letter-spacing:.4px; color:var(--mb-ink-soft); border-bottom:2px solid var(--mb-line); font-weight:700; }
+.table td, .table th{ vertical-align:middle; color:var(--mb-ink); border-color:var(--mb-line); font-size:13.5px; }
+.table-hover>tbody>tr:hover>*{ background:var(--mb-blue-light); }
+
+.badge-status{ font-size:11px; font-weight:700; padding:5px 10px; border-radius:99px; white-space:nowrap; }
+.st-Menunggu-Pickup{ background:#fdf1de; color:var(--mb-amber); }
+.st-Dikemas{ background:#eaf1ff; color:var(--mb-blue); }
+.st-Dalam-Perjalanan{ background:#f0e9fd; color:var(--mb-purple); }
+.st-Terkirim{ background:#e4f7ef; color:var(--mb-green); }
+.st-Retur{ background:#fdeaea; color:var(--mb-red); }
+[data-theme="dark"] .st-Menunggu-Pickup{ background:#2c2410; } [data-theme="dark"] .st-Dikemas{ background:#16233f; }
+[data-theme="dark"] .st-Dalam-Perjalanan{ background:#241a3d; } [data-theme="dark"] .st-Terkirim{ background:#0f2b21; } [data-theme="dark"] .st-Retur{ background:#2c1414; }
+
+.btn-mb{ background:linear-gradient(135deg,var(--mb-blue),var(--mb-blue-dark)); border:none; color:#fff; font-weight:700; border-radius:10px; padding:9px 16px; font-size:13.5px; }
+.btn-mb:hover{ color:#fff; opacity:.92; }
+.btn-outline-mb{ border:1.5px solid var(--mb-blue); color:var(--mb-blue); background:transparent; font-weight:700; border-radius:10px; padding:8px 14px; font-size:13.5px; }
+.btn-outline-mb:hover{ background:var(--mb-blue-light); color:var(--mb-blue); }
+
+.form-control, .form-select{ background:var(--mb-white); border:1.5px solid var(--mb-line); color:var(--mb-ink); border-radius:10px; font-size:14px; padding:8px 12px; }
+.form-control:focus, .form-select:focus{ border-color:var(--mb-blue); box-shadow:0 0 0 3px rgba(25,87,224,.12); background:var(--mb-white); color:var(--mb-ink); }
+label.form-label{ font-weight:700; font-size:12.5px; color:var(--mb-ink-soft); }
+
+.empty-state{ text-align:center; padding:40px 20px; color:var(--mb-ink-soft); }
+.empty-state i{ font-size:38px; margin-bottom:10px; color:var(--mb-line); display:block; }
+
+.mb-burger{ display:none; }
+@media (max-width:991px){
+  .mb-sidebar{ transform:translateX(-100%); } .mb-sidebar.show{ transform:translateX(0); }
+  .mb-main{ margin-left:0; padding:14px; } .mb-burger{ display:inline-flex; }
+  .mb-backdrop{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.35); z-index:1030; } .mb-backdrop.show{ display:block; }
+}
+
+/* Timeline riwayat status */
+.timeline{ list-style:none; margin:0; padding:0; }
+.timeline li{ position:relative; padding-left:26px; padding-bottom:16px; border-left:2px solid var(--mb-line); margin-left:6px; }
+.timeline li:last-child{ border-color:transparent; padding-bottom:0; }
+.timeline li::before{ content:''; position:absolute; left:-7px; top:2px; width:12px; height:12px; border-radius:50%; background:var(--mb-blue); border:2px solid var(--mb-white); }
+.timeline .t-status{ font-weight:700; font-size:13.5px; }
+.timeline .t-time{ font-size:11.5px; color:var(--mb-ink-soft); }
+
+/* Label pengiriman cetak */
+#labelArea{ background:#fff; color:#0b0b0b; padding:22px; border-radius:10px; width:400px; margin:0 auto; }
+.label-box{ border:2px dashed #1957e0; border-radius:10px; padding:16px; }
+.label-head{ display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #1957e0; padding-bottom:10px; margin-bottom:10px; }
+.label-head b{ color:#1957e0; font-size:15px; }
+.barcode{ display:flex; gap:2px; height:46px; align-items:flex-end; margin:10px 0; }
+.barcode span{ background:#0b0b0b; flex:0 0 auto; }
+@media print{
+  body *{ visibility:hidden; }
+  #labelArea, #labelArea *{ visibility:visible; }
+  #labelArea{ position:absolute; top:0; left:0; width:100%; }
+  .no-print{ display:none !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="mb-backdrop" id="mbBackdrop" onclick="toggleSidebar(false)"></div>
+<div class="mb-shell">
+
+  <aside class="mb-sidebar" id="mbSidebar">
+    <a href="dashboard.html" class="mb-brand">
+      <div class="mb-brand-icon" id="sidebarLogo"><i class="fa-solid fa-box"></i></div>
+      <div><b id="sidebarStoreName" class="brand-font">MAXBOXS.STORE</b><span>Modul Paket &amp; Kurir</span></div>
+    </a>
+    <nav class="mb-nav">
+      <a class="nav-link active" data-page="daftar"><i class="fa-solid fa-boxes-packing"></i> Daftar Pengiriman</a>
+      <a class="nav-link" data-page="tambah"><i class="fa-solid fa-plus"></i> Tambah Pengiriman</a>
+      <div class="mb-nav-divider">Navigasi</div>
+      <a class="nav-link" href="dashboard.html"><i class="fa-solid fa-house"></i> Dashboard Utama</a>
+      <a class="nav-link" href="index.html"><i class="fa-solid fa-cash-register"></i> Kasir &amp; Invoice</a>
+      <a class="nav-link" href="keuangan.html"><i class="fa-solid fa-sack-dollar"></i> Keuangan</a>
+    </nav>
+  </aside>
+
+  <main class="mb-main">
+    <div class="mb-topbar">
+      <div class="d-flex align-items-center gap-3">
+        <button class="btn btn-light border mb-burger" onclick="toggleSidebar(true)"><i class="fa-solid fa-bars"></i></button>
+        <div class="fw-bold" id="pageTitle" style="font-size:15px;">Daftar Pengiriman</div>
+      </div>
+      <button class="btn btn-light border" id="darkToggle"><i class="fa-solid fa-moon"></i></button>
+    </div>
+
+    <!-- ===================== DAFTAR PENGIRIMAN ===================== -->
+    <section class="mb-page active" id="page-daftar">
+      <div class="section-title">Daftar Pengiriman</div>
+      <div class="section-sub">Kelola status paket yang dikirim ke customer.</div>
+
+      <div class="row g-2 mb-4">
+        <div class="col-6 col-lg-3">
+          <div class="mb-stat" onclick="filterByStatus('')"><div class="ic" style="background:linear-gradient(135deg,var(--mb-blue),var(--mb-blue-dark))"><i class="fa-solid fa-box"></i></div>
+            <h3 id="statTotal">0</h3><p>Total Paket</p></div>
+        </div>
+        <div class="col-6 col-lg-3">
+          <div class="mb-stat" onclick="filterByStatus('Menunggu Pickup')"><div class="ic" style="background:linear-gradient(135deg,#e79a1a,#b5760a)"><i class="fa-solid fa-hourglass-half"></i></div>
+            <h3 id="statWaiting">0</h3><p>Menunggu Pickup</p></div>
+        </div>
+        <div class="col-6 col-lg-3">
+          <div class="mb-stat" onclick="filterByStatus('Dalam Perjalanan')"><div class="ic" style="background:linear-gradient(135deg,#8b5cf6,#5b34ad)"><i class="fa-solid fa-truck-fast"></i></div>
+            <h3 id="statTransit">0</h3><p>Dalam Perjalanan</p></div>
+        </div>
+        <div class="col-6 col-lg-3">
+          <div class="mb-stat" onclick="filterByStatus('Terkirim')"><div class="ic" style="background:linear-gradient(135deg,#17a673,#0e7a52)"><i class="fa-solid fa-circle-check"></i></div>
+            <h3 id="statDelivered">0</h3><p>Terkirim</p></div>
+        </div>
+      </div>
+
+      <div class="mb-card p-3 mb-3">
+        <div class="row g-2">
+          <div class="col-md-4"><input type="text" class="form-control" id="searchShipment" placeholder="Cari resi / nama / invoice..."></div>
+          <div class="col-md-4">
+            <select class="form-select" id="filterShipmentStatus">
+              <option value="">Semua Status</option>
+              <option>Menunggu Pickup</option><option>Dikemas</option><option>Dalam Perjalanan</option><option>Terkirim</option><option>Retur</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <select class="form-select" id="filterShipmentKurir"><option value="">Semua Kurir</option></select>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-card p-3">
+        <div class="table-responsive">
+          <table class="table table-hover mb-0">
+            <thead><tr><th>No. Resi</th><th>Customer</th><th>Kurir</th><th>Status</th><th>Tanggal</th><th class="text-end">Aksi</th></tr></thead>
+            <tbody id="shipmentBody"></tbody>
+          </table>
+        </div>
+        <div class="empty-state d-none" id="shipmentEmpty"><i class="fa-solid fa-box-open"></i>Belum ada data pengiriman</div>
+      </div>
+    </section>
+
+    <!-- ===================== TAMBAH PENGIRIMAN ===================== -->
+    <section class="mb-page" id="page-tambah">
+      <div class="section-title" id="formTitle">Tambah Pengiriman Baru</div>
+      <div class="section-sub">Hubungkan dengan invoice yang sudah ada, pesanan masuk dari customer, atau isi manual.</div>
+
+      <div class="row g-3">
+        <div class="col-lg-7">
+          <div class="mb-card p-4 mb-3">
+            <div class="fw-bold mb-3"><i class="fa-solid fa-link text-primary me-1"></i> Hubungkan dengan Invoice (opsional)</div>
+            <select class="form-select" id="linkOrderSelect" onchange="fillFromOrder()">
+              <option value="">-- Isi manual / tanpa invoice --</option>
+            </select>
+          </div>
+
+          <div class="mb-card p-4 mb-3">
+            <div class="fw-bold mb-3"><i class="fa-solid fa-inbox text-primary me-1"></i> Atau dari Pesanan Masuk Customer (opsional)</div>
+            <select class="form-select" id="linkPendingSelect" onchange="fillFromPending()">
+              <option value="">-- Tidak dari pesanan masuk --</option>
+            </select>
+            <div class="form-text mt-1" style="font-size:12px;">Menarik data nama, WhatsApp &amp; alamat langsung dari form <code>pesan.html</code> yang diisi customer sendiri, meski belum diproses jadi invoice.</div>
+          </div>
+
+          <div class="mb-card p-4 mb-3">
+            <div class="fw-bold mb-3"><i class="fa-solid fa-user text-primary me-1"></i> Data Penerima</div>
+            <input type="hidden" id="shipmentId">
+            <input type="hidden" id="shipmentOrderId">
+            <input type="hidden" id="shipmentPendingId">
+            <input type="hidden" id="shipmentPendingRef">
+            <div class="row g-3">
+              <div class="col-md-6"><label class="form-label">Nama Penerima</label><input type="text" class="form-control" id="shipCustomerName"></div>
+              <div class="col-md-6"><label class="form-label">Nomor WhatsApp</label><input type="text" class="form-control" id="shipCustomerWa"></div>
+              <div class="col-md-12"><label class="form-label">Alamat Lengkap</label><textarea class="form-control" id="shipCustomerAddress" rows="2"></textarea></div>
+            </div>
+          </div>
+
+          <div class="mb-card p-4">
+            <div class="fw-bold mb-3"><i class="fa-solid fa-truck text-primary me-1"></i> Detail Pengiriman</div>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">Kurir</label>
+                <select class="form-select" id="shipKurir">
+                  <option>JNE</option><option>J&amp;T Express</option><option>SiCepat</option><option>AnterAja</option>
+                  <option>ID Express</option><option>Ninja Xpress</option><option>GoSend</option><option>GrabExpress</option>
+                  <option>Kurir Toko (Manual)</option><option>Lainnya</option>
+                </select>
+              </div>
+              <div class="col-md-6"><label class="form-label">Nomor Resi</label><input type="text" class="form-control" id="shipResi" placeholder="Boleh dikosongkan dulu"></div>
+              <div class="col-md-6"><label class="form-label">Berat Paket (kg)</label><input type="number" step="0.1" class="form-control" id="shipWeight" value="1"></div>
+              <div class="col-md-6">
+                <label class="form-label">Status Awal</label>
+                <select class="form-select" id="shipStatus">
+                  <option>Menunggu Pickup</option><option>Dikemas</option><option>Dalam Perjalanan</option><option>Terkirim</option><option>Retur</option>
+                </select>
+              </div>
+              <div class="col-md-12"><label class="form-label">Catatan (opsional)</label><textarea class="form-control" id="shipNote" rows="2"></textarea></div>
+            </div>
+            <div class="d-flex gap-2 mt-4">
+              <button class="btn btn-mb" onclick="saveShipment()"><i class="fa-solid fa-floppy-disk me-1"></i>Simpan Pengiriman</button>
+              <button class="btn btn-light border" onclick="resetShipmentForm()"><i class="fa-solid fa-rotate-left me-1"></i>Reset</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-5">
+          <div class="mb-card p-4" style="position:sticky; top:20px;">
+            <div class="fw-bold mb-2"><i class="fa-solid fa-circle-info text-primary me-1"></i> Panduan Cepat</div>
+            <ul style="font-size:13px; color:var(--mb-ink-soft); padding-left:18px; line-height:1.9;">
+              <li>Pilih invoice untuk mengisi otomatis nama, WA, dan alamat customer.</li>
+              <li>Nomor resi bisa dikosongkan dulu lalu diisi setelah kurir pickup.</li>
+              <li>Setelah tersimpan, kamu bisa cetak label pengiriman dan update status kapan saja dari Daftar Pengiriman.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- MODAL DETAIL / UPDATE STATUS -->
+<div class="modal fade" id="detailModal" tabindex="-1">
+  <div class="modal-dialog"><div class="modal-content" style="border-radius:16px;">
+    <div class="modal-header"><h5 class="modal-title">Detail Pengiriman</h5><button class="btn-close" data-bs-dismiss="modal"></button></div>
+    <div class="modal-body">
+      <div id="detailInfo" class="mb-3" style="font-size:13.5px;"></div>
+      <div class="mb-3">
+        <label class="form-label">Update Status</label>
+        <div class="d-flex gap-2">
+          <select class="form-select" id="updateStatusSelect">
+            <option>Menunggu Pickup</option><option>Dikemas</option><option>Dalam Perjalanan</option><option>Terkirim</option><option>Retur</option>
+          </select>
+          <button class="btn btn-mb" onclick="updateStatus()">Update</button>
+        </div>
+      </div>
+      <hr>
+      <div class="fw-bold mb-2" style="font-size:13.5px;">Riwayat Status</div>
+      <ul class="timeline" id="historyTimeline"></ul>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline-mb" onclick="openLabelPreview()"><i class="fa-solid fa-tag me-1"></i>Cetak Label</button>
+      <button class="btn btn-light border text-danger" onclick="deleteShipmentFromModal()"><i class="fa-solid fa-trash me-1"></i>Hapus</button>
+    </div>
+  </div></div>
+</div>
+
+<!-- MODAL LABEL PENGIRIMAN -->
+<div class="modal fade" id="labelModal" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content" style="border-radius:16px;">
+      <div class="modal-header no-print"><h5 class="modal-title">Label Pengiriman</h5><button class="btn-close" data-bs-dismiss="modal"></button></div>
+      <div class="modal-body" style="background:#eef1f8;">
+        <div id="labelArea"></div>
+      </div>
+      <div class="modal-footer no-print">
+        <button class="btn btn-mb" onclick="window.print()"><i class="fa-solid fa-print me-1"></i>Cetak Label</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script>
+function loadLS(key, fallback){ try{ const v = localStorage.getItem(key); return v?JSON.parse(v):fallback; }catch(e){ return fallback; } }
+function saveLS(key, val){ localStorage.setItem(key, JSON.stringify(val)); }
+function uid(){ return 'id'+Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
+function formatDateID(ts){ return new Date(ts).toLocaleDateString('id-ID', {day:'2-digit', month:'short', year:'numeric'}); }
+function formatDateTimeID(ts){ return new Date(ts).toLocaleString('id-ID', {day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit'}); }
+
+const settings = loadLS('maxbox_settings', {storeName:'MAXBOXS.STORE', logo:'', wa:'', address:''});
+const orders = loadLS('maxbox_orders', []);
+let pendingOrders = loadLS('maxbox_pending_orders', []);
+let shipments = loadLS('maxbox_shipments', []);
+function persist(){ saveLS('maxbox_shipments', shipments); }
+
+function applyBranding(){
+  document.getElementById('sidebarStoreName').textContent = settings.storeName || 'MAXBOXS.STORE';
+  document.title = 'Paket & Kurir — ' + (settings.storeName || 'MAXBOXS.STORE');
+  document.getElementById('sidebarLogo').innerHTML = settings.logo ? `<img src="${settings.logo}">` : `<i class="fa-solid fa-box"></i>`;
+}
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  document.getElementById('darkToggle').innerHTML = theme==='dark' ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
+  saveLS('maxbox_theme', theme);
+}
+document.getElementById('darkToggle').addEventListener('click', ()=>{
+  const cur = document.documentElement.getAttribute('data-theme')==='dark' ? 'light':'dark';
+  applyTheme(cur);
+});
+
+/* ---------------- Navigation ---------------- */
+const pageTitles = { daftar:'Daftar Pengiriman', tambah:'Tambah Pengiriman' };
+function goPage(page){
+  document.querySelectorAll('.mb-page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  document.querySelectorAll('.mb-nav .nav-link[data-page]').forEach(a=>a.classList.remove('active'));
+  const el = document.querySelector(`.mb-nav .nav-link[data-page="${page}"]`);
+  if(el) el.classList.add('active');
+  document.getElementById('pageTitle').textContent = pageTitles[page];
+  toggleSidebar(false);
+  if(page==='daftar') renderShipments();
+  if(page==='tambah') prepareShipmentForm();
+}
+document.querySelectorAll('.mb-nav .nav-link[data-page]').forEach(a=> a.addEventListener('click', ()=>goPage(a.dataset.page)));
+function toggleSidebar(show){ document.getElementById('mbSidebar').classList.toggle('show', show); document.getElementById('mbBackdrop').classList.toggle('show', show); }
+
+/* ===================== DAFTAR PENGIRIMAN ===================== */
+function statusClass(status){ return 'st-'+status.replace(/ /g,'-'); }
+function filterByStatus(status){
+  document.getElementById('filterShipmentStatus').value = status;
+  renderShipments();
+}
+function renderShipments(){
+  document.getElementById('statTotal').textContent = shipments.length;
+  document.getElementById('statWaiting').textContent = shipments.filter(s=>s.status==='Menunggu Pickup').length;
+  document.getElementById('statTransit').textContent = shipments.filter(s=>s.status==='Dalam Perjalanan').length;
+  document.getElementById('statDelivered').textContent = shipments.filter(s=>s.status==='Terkirim').length;
+
+  const kurirSel = document.getElementById('filterShipmentKurir');
+  const kurirs = [...new Set(shipments.map(s=>s.kurir))];
+  const curKurir = kurirSel.value;
+  kurirSel.innerHTML = '<option value="">Semua Kurir</option>' + kurirs.map(k=>`<option value="${k}">${k}</option>`).join('');
+  kurirSel.value = curKurir;
+
+  const search = document.getElementById('searchShipment').value.toLowerCase();
+  const statusF = document.getElementById('filterShipmentStatus').value;
+  const kurirF = document.getElementById('filterShipmentKurir').value;
+  let list = [...shipments].sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+  list = list.filter(s=>{
+    const m1 = ((s.resi||'')+' '+s.customerName+' '+(s.invoiceRef||'')+' '+(s.pendingRef||'')).toLowerCase().includes(search);
+    const m2 = !statusF || s.status===statusF;
+    const m3 = !kurirF || s.kurir===kurirF;
+    return m1&&m2&&m3;
+  });
+
+  const body = document.getElementById('shipmentBody');
+  body.innerHTML = '';
+  document.getElementById('shipmentEmpty').classList.toggle('d-none', list.length>0);
+  list.forEach(s=>{
+    body.insertAdjacentHTML('beforeend', `
+      <tr>
+        <td class="fw-semibold">${s.resi || '<span class="text-muted">Belum ada resi</span>'}</td>
+        <td>${s.customerName}${s.invoiceRef? `<div style="font-size:11px;color:var(--mb-ink-soft)">Invoice: ${s.invoiceRef}</div>`:''}${s.pendingRef? `<div style="font-size:11px;color:var(--mb-amber)">Ref Pesanan: ${s.pendingRef}</div>`:''}</td>
+        <td>${s.kurir}</td>
+        <td><span class="badge-status ${statusClass(s.status)}">${s.status}</span></td>
+        <td>${formatDateID(s.createdAt)}</td>
+        <td class="text-end">
+          <button class="btn btn-sm btn-light border me-1" onclick="openDetail('${s.id}')"><i class="fa-solid fa-eye"></i></button>
+          <button class="btn btn-sm btn-light border me-1" onclick="editShipment('${s.id}')"><i class="fa-solid fa-pen"></i></button>
+          <button class="btn btn-sm btn-light border text-danger" onclick="deleteShipment('${s.id}')"><i class="fa-solid fa-trash"></i></button>
+        </td>
+      </tr>`);
+  });
+}
+['searchShipment','filterShipmentStatus','filterShipmentKurir'].forEach(id=>{
+  document.getElementById(id).addEventListener('input', renderShipments);
+  document.getElementById(id).addEventListener('change', renderShipments);
+});
+
+/* ===================== TAMBAH / EDIT PENGIRIMAN ===================== */
+let editingShipmentId = null;
+function prepareShipmentForm(){
+  pendingOrders = loadLS('maxbox_pending_orders', []);
+  const sel = document.getElementById('linkOrderSelect');
+  sel.innerHTML = '<option value="">-- Isi manual / tanpa invoice --</option>' + orders.map(o=>`<option value="${o.id}">${o.invoice} — ${o.customerName}</option>`).join('');
+  const selPending = document.getElementById('linkPendingSelect');
+  selPending.innerHTML = '<option value="">-- Tidak dari pesanan masuk --</option>' + pendingOrders.map(o=>`<option value="${o.id}">${o.refCode} — ${o.customerName}</option>`).join('');
+}
+function fillFromOrder(){
+  const id = document.getElementById('linkOrderSelect').value;
+  document.getElementById('shipmentOrderId').value = id;
+  if(!id) return;
+  document.getElementById('linkPendingSelect').value = '';
+  document.getElementById('shipmentPendingId').value = '';
+  document.getElementById('shipmentPendingRef').value = '';
+  const o = orders.find(x=>x.id===id);
+  if(!o) return;
+  document.getElementById('shipCustomerName').value = o.customerName;
+  document.getElementById('shipCustomerWa').value = o.customerWa;
+  document.getElementById('shipCustomerAddress').value = o.customerAddress;
+}
+function fillFromPending(){
+  const id = document.getElementById('linkPendingSelect').value;
+  document.getElementById('shipmentPendingId').value = id;
+  if(!id){ document.getElementById('shipmentPendingRef').value = ''; return; }
+  document.getElementById('linkOrderSelect').value = '';
+  document.getElementById('shipmentOrderId').value = '';
+  const o = pendingOrders.find(x=>x.id===id);
+  if(!o) return;
+  document.getElementById('shipmentPendingRef').value = o.refCode;
+  document.getElementById('shipCustomerName').value = o.customerName;
+  document.getElementById('shipCustomerWa').value = o.customerWa;
+  document.getElementById('shipCustomerAddress').value = o.customerAddress;
+  if(o.note) document.getElementById('shipNote').value = o.note;
+}
+function resetShipmentForm(){
+  editingShipmentId = null;
+  document.getElementById('formTitle').textContent = 'Tambah Pengiriman Baru';
+  document.getElementById('shipmentId').value = '';
+  document.getElementById('shipmentOrderId').value = '';
+  document.getElementById('shipmentPendingId').value = '';
+  document.getElementById('shipmentPendingRef').value = '';
+  document.getElementById('linkOrderSelect').value = '';
+  document.getElementById('linkPendingSelect').value = '';
+  document.getElementById('shipCustomerName').value = '';
+  document.getElementById('shipCustomerWa').value = '';
+  document.getElementById('shipCustomerAddress').value = '';
+  document.getElementById('shipKurir').value = 'JNE';
+  document.getElementById('shipResi').value = '';
+  document.getElementById('shipWeight').value = 1;
+  document.getElementById('shipStatus').value = 'Menunggu Pickup';
+  document.getElementById('shipNote').value = '';
+  prepareShipmentForm();
+}
+function editShipment(id){
+  const s = shipments.find(x=>x.id===id);
+  if(!s) return;
+  editingShipmentId = id;
+  goPage('tambah');
+  document.getElementById('formTitle').textContent = 'Edit Pengiriman';
+  document.getElementById('shipmentId').value = s.id;
+  document.getElementById('shipmentOrderId').value = s.orderId || '';
+  document.getElementById('shipmentPendingId').value = s.pendingId || '';
+  document.getElementById('shipmentPendingRef').value = s.pendingRef || '';
+  document.getElementById('linkOrderSelect').value = s.orderId || '';
+  document.getElementById('linkPendingSelect').value = s.pendingId || '';
+  document.getElementById('shipCustomerName').value = s.customerName;
+  document.getElementById('shipCustomerWa').value = s.customerWa;
+  document.getElementById('shipCustomerAddress').value = s.customerAddress;
+  document.getElementById('shipKurir').value = s.kurir;
+  document.getElementById('shipResi').value = s.resi;
+  document.getElementById('shipWeight').value = s.weight;
+  document.getElementById('shipStatus').value = s.status;
+  document.getElementById('shipNote').value = s.note || '';
+}
+function saveShipment(){
+  const name = document.getElementById('shipCustomerName').value.trim();
+  const wa = document.getElementById('shipCustomerWa').value.trim();
+  const address = document.getElementById('shipCustomerAddress').value.trim();
+  if(!name || !wa || !address){ Swal.fire({icon:'warning', title:'Lengkapi Data', text:'Nama, WhatsApp, dan alamat penerima wajib diisi.'}); return; }
+
+  const orderId = document.getElementById('shipmentOrderId').value;
+  const orderObj = orderId ? orders.find(o=>o.id===orderId) : null;
+  const pendingId = document.getElementById('shipmentPendingId').value;
+  const pendingRef = document.getElementById('shipmentPendingRef').value;
+  const status = document.getElementById('shipStatus').value;
+
+  if(editingShipmentId){
+    const s = shipments.find(x=>x.id===editingShipmentId);
+    const statusChanged = s.status !== status;
+    Object.assign(s, {
+      orderId: orderId||null, invoiceRef: orderObj? orderObj.invoice : (s.invoiceRef||null),
+      pendingId: pendingId||null, pendingRef: pendingRef||(s.pendingRef||null),
+      customerName:name, customerWa:wa, customerAddress:address,
+      kurir: document.getElementById('shipKurir').value,
+      resi: document.getElementById('shipResi').value.trim(),
+      weight: Number(document.getElementById('shipWeight').value)||1,
+      status, note: document.getElementById('shipNote').value.trim(),
+      updatedAt: Date.now()
+    });
+    if(statusChanged) s.history.push({status, time:Date.now()});
+  }else{
+    const newShipment = {
+      id: uid(),
+      orderId: orderId||null, invoiceRef: orderObj? orderObj.invoice : null,
+      pendingId: pendingId||null, pendingRef: pendingRef||null,
+      customerName:name, customerWa:wa, customerAddress:address,
+      kurir: document.getElementById('shipKurir').value,
+      resi: document.getElementById('shipResi').value.trim(),
+      weight: Number(document.getElementById('shipWeight').value)||1,
+      status, note: document.getElementById('shipNote').value.trim(),
+      createdAt: Date.now(), updatedAt: Date.now(),
+      history: [{status, time:Date.now()}]
+    };
+    shipments.push(newShipment);
+  }
+  persist();
+  Swal.fire({icon:'success', title:'Pengiriman Tersimpan', timer:1300, showConfirmButton:false})
+  .then(()=>{ resetShipmentForm(); goPage('daftar'); });
+}
+function deleteShipment(id){
+  Swal.fire({icon:'warning', title:'Hapus data pengiriman ini?', showCancelButton:true, confirmButtonColor:'#e14848', confirmButtonText:'Hapus', cancelButtonText:'Batal'})
+  .then(r=>{ if(r.isConfirmed){ shipments = shipments.filter(s=>s.id!==id); persist(); renderShipments(); Swal.fire({icon:'success', title:'Dihapus', timer:900, showConfirmButton:false}); } });
+}
+
+/* ===================== DETAIL / UPDATE STATUS ===================== */
+let detailModal, labelModal;
+let currentDetailId = null;
+function openDetail(id){
+  const s = shipments.find(x=>x.id===id);
+  if(!s) return;
+  currentDetailId = id;
+  document.getElementById('detailInfo').innerHTML = `
+    <div class="mb-1"><b>${s.customerName}</b> — ${s.customerWa}</div>
+    <div class="mb-1" style="color:var(--mb-ink-soft)">${s.customerAddress}</div>
+    <div class="mb-1"><b>Kurir:</b> ${s.kurir} &nbsp; <b>Resi:</b> ${s.resi||'-'}</div>
+    ${s.invoiceRef? `<div class="mb-1"><b>Invoice:</b> ${s.invoiceRef}</div>` : ''}
+    ${s.pendingRef? `<div class="mb-1"><b>Ref Pesanan Masuk:</b> ${s.pendingRef}</div>` : ''}
+    ${s.note? `<div class="mb-1"><b>Catatan:</b> ${s.note}</div>` : ''}
+  `;
+  document.getElementById('updateStatusSelect').value = s.status;
+  const timeline = document.getElementById('historyTimeline');
+  timeline.innerHTML = '';
+  [...s.history].reverse().forEach(h=>{
+    timeline.insertAdjacentHTML('beforeend', `<li><div class="t-status">${h.status}</div><div class="t-time">${formatDateTimeID(h.time)}</div></li>`);
+  });
+  detailModal = detailModal || new bootstrap.Modal('#detailModal');
+  detailModal.show();
+}
+function updateStatus(){
+  const s = shipments.find(x=>x.id===currentDetailId);
+  if(!s) return;
+  const newStatus = document.getElementById('updateStatusSelect').value;
+  s.status = newStatus; s.updatedAt = Date.now();
+  s.history.push({status:newStatus, time:Date.now()});
+  persist();
+  openDetail(currentDetailId);
+  renderShipments();
+  Swal.fire({icon:'success', title:'Status Diperbarui', timer:1000, showConfirmButton:false});
+}
+function deleteShipmentFromModal(){
+  const id = currentDetailId;
+  detailModal.hide();
+  setTimeout(()=> deleteShipment(id), 300);
+}
+
+/* ===================== LABEL PENGIRIMAN ===================== */
+function buildBarcode(seed){
+  let bars = '';
+  const str = String(seed);
+  for(let i=0;i<40;i++){
+    const w = (str.charCodeAt(i % str.length) % 3) + 1;
+    const h = 20 + (str.charCodeAt((i*3) % str.length) % 26);
+    bars += `<span style="width:${w}px;height:${h}px;"></span>`;
+  }
+  return bars;
+}
+function openLabelPreview(){
+  const s = shipments.find(x=>x.id===currentDetailId);
+  if(!s) return;
+  document.getElementById('labelArea').innerHTML = `
+    <div class="label-box">
+      <div class="label-head">
+        <b>${settings.storeName || 'MAXBOXS.STORE'}</b>
+        <span style="font-size:12px;">${s.kurir}</span>
+      </div>
+      <div style="font-size:12px; color:#5b6478; margin-bottom:10px;">
+        <b>Pengirim:</b> ${settings.storeName||'MAXBOXS.STORE'}<br>
+        ${settings.address || '-'}<br>
+        ${settings.wa? 'WA: '+settings.wa : ''}
+      </div>
+      <hr>
+      <div style="font-size:13px; margin-bottom:6px;"><b>Kepada:</b></div>
+      <div style="font-size:15px; font-weight:800;">${s.customerName}</div>
+      <div style="font-size:13px;">${s.customerWa}</div>
+      <div style="font-size:13px; margin-top:4px;">${s.customerAddress}</div>
+      <div class="barcode">${buildBarcode(s.resi || s.id)}</div>
+      <div style="text-align:center; font-size:12px; letter-spacing:2px;">${s.resi || 'BELUM ADA RESI'}</div>
+      <div style="display:flex; justify-content:space-between; font-size:11.5px; color:#5b6478; margin-top:10px;">
+        <span>Berat: ${s.weight} kg</span>
+        <span>${s.invoiceRef? 'Invoice: '+s.invoiceRef : (s.pendingRef? 'Ref: '+s.pendingRef : '')}</span>
+      </div>
+    </div>`;
+  labelModal = labelModal || new bootstrap.Modal('#labelModal');
+  detailModal.hide();
+  labelModal.show();
+}
+
+/* ===================== INIT ===================== */
+function init(){
+  const theme = loadLS('maxbox_theme', 'light');
+  applyTheme(theme);
+  applyBranding();
+  renderShipments();
+  prepareShipmentForm();
+}
+window.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>

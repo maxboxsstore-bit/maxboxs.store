@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Form Pesanan — MAXBOXS.STORE</title>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.10.5/sweetalert2.all.min.js"></script>
+
+<style>
+:root{
+  --mb-blue:#1957e0; --mb-blue-dark:#0f3fae; --mb-blue-light:#eaf1ff;
+  --mb-ink:#10182c; --mb-ink-soft:#5b6478; --mb-line:#e7ebf3; --mb-bg:#f6f8fc; --mb-white:#fff;
+  --mb-green:#17a673; --mb-red:#e14848; --radius:16px; --shadow:0 4px 22px rgba(16,24,44,.06);
+}
+*{box-sizing:border-box;}
+body{ font-family:'Plus Jakarta Sans',sans-serif; background:var(--mb-bg); color:var(--mb-ink); min-height:100vh; }
+h1,h2,h3,.brand-font{ font-family:'Sora',sans-serif; }
+.wrap{ max-width:640px; margin:0 auto; padding:22px 16px 70px; }
+
+.hero{
+  background:linear-gradient(135deg,var(--mb-blue),var(--mb-blue-dark)); border-radius:var(--radius);
+  padding:26px 22px; color:#fff; margin-bottom:18px; display:flex; align-items:center; gap:14px;
+  box-shadow:0 10px 28px rgba(25,87,224,.25);
+}
+.hero .logo{ width:54px; height:54px; border-radius:12px; background:#fff; display:flex; align-items:center; justify-content:center; overflow:hidden; flex-shrink:0; }
+.hero .logo img{ width:100%; height:100%; object-fit:contain; padding:3px; }
+.hero .logo i{ color:var(--mb-blue); font-size:22px; }
+.hero h1{ font-size:19px; margin:0; font-weight:800; }
+.hero p{ margin:2px 0 0; font-size:12.5px; opacity:.9; }
+
+.card-mb{ background:var(--mb-white); border:1px solid var(--mb-line); border-radius:var(--radius); box-shadow:var(--shadow); padding:20px; margin-bottom:16px; }
+.card-mb .title{ font-weight:800; font-size:15px; margin-bottom:14px; display:flex; align-items:center; gap:8px; }
+.card-mb .title i{ color:var(--mb-blue); }
+
+label.form-label{ font-weight:700; font-size:13px; color:var(--mb-ink-soft); }
+.form-control, .form-select{ border:1.5px solid var(--mb-line); border-radius:10px; font-size:14.5px; padding:10px 12px; }
+.form-control:focus, .form-select:focus{ border-color:var(--mb-blue); box-shadow:0 0 0 3px rgba(25,87,224,.12); }
+
+.item-row{ border:1px solid var(--mb-line); border-radius:12px; padding:14px; margin-bottom:12px; background:var(--mb-bg); }
+
+.btn-mb{ background:linear-gradient(135deg,var(--mb-blue),var(--mb-blue-dark)); border:none; color:#fff; font-weight:700; border-radius:10px; padding:11px 18px; font-size:15px; }
+.btn-mb:hover{ color:#fff; opacity:.92; }
+.btn-outline-mb{ border:1.5px solid var(--mb-blue); color:var(--mb-blue); background:transparent; font-weight:700; border-radius:10px; padding:10px 16px; font-size:14px; }
+.btn-outline-mb:hover{ background:var(--mb-blue-light); color:var(--mb-blue); }
+
+.summary-row{ display:flex; justify-content:space-between; padding:6px 0; font-size:14px; }
+.summary-row b{ font-weight:800; }
+.summary-total{ border-top:2px solid var(--mb-blue); margin-top:6px; padding-top:10px; font-size:19px; }
+.summary-total b{ color:var(--mb-blue); }
+
+.footer-note{ text-align:center; color:var(--mb-ink-soft); font-size:12px; margin-top:20px; }
+
+.empty-hint{ text-align:center; padding:20px; color:var(--mb-ink-soft); font-size:13px; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="hero">
+    <div class="logo" id="heroLogo"><i class="fa-solid fa-box"></i></div>
+    <div>
+      <h1 id="heroStoreName">MAXBOXS.STORE</h1>
+      <p>Isi form di bawah ini untuk membuat pesanan sendiri. Tim kami akan segera memprosesnya.</p>
+    </div>
+  </div>
+
+  <div class="card-mb">
+    <div class="title"><i class="fa-solid fa-user"></i> Data Pemesan</div>
+    <div class="mb-3">
+      <label class="form-label">Nama Lengkap <span class="text-danger">*</span></label>
+      <input type="text" class="form-control" id="custName" placeholder="Nama lengkap kamu">
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Nomor WhatsApp <span class="text-danger">*</span></label>
+      <input type="text" class="form-control" id="custWa" placeholder="08xxxxxxxxxx">
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Alamat Lengkap <span class="text-danger">*</span></label>
+      <textarea class="form-control" id="custAddress" rows="2" placeholder="Alamat lengkap untuk pengiriman"></textarea>
+    </div>
+    <div class="mb-0">
+      <label class="form-label">Catatan (opsional)</label>
+      <textarea class="form-control" id="custNote" rows="2" placeholder="Contoh: warna, permintaan khusus, dll."></textarea>
+    </div>
+  </div>
+
+  <div class="card-mb">
+    <div class="d-flex justify-content-between align-items-center mb-1">
+      <div class="title mb-0"><i class="fa-solid fa-box-open"></i> Pilih Produk</div>
+      <button class="btn btn-outline-mb btn-sm" onclick="addItemRow()"><i class="fa-solid fa-plus me-1"></i>Tambah</button>
+    </div>
+    <div id="itemsWrapper" class="mt-2"></div>
+  </div>
+
+  <div class="card-mb">
+    <div class="title"><i class="fa-solid fa-credit-card"></i> Metode Pembayaran</div>
+    <select class="form-select" id="payMethod">
+      <option value="QRIS">QRIS</option>
+      <option value="Transfer">Transfer</option>
+      <option value="Cash">Cash (Bayar di Tempat/COD)</option>
+    </select>
+    <div class="form-text mt-2" style="font-size:12px;">Admin akan mengonfirmasi total akhir (termasuk ongkir/diskon jika ada) setelah pesanan diterima.</div>
+  </div>
+
+  <div class="card-mb">
+    <div class="title"><i class="fa-solid fa-calculator"></i> Ringkasan Pesanan</div>
+    <div class="summary-row"><span>Total Qty</span><b id="sumQty">0</b></div>
+    <div class="summary-row summary-total"><span>Perkiraan Total</span><b id="sumTotal">Rp0</b></div>
+  </div>
+
+  <div class="d-grid gap-2">
+    <button class="btn btn-mb" onclick="submitOrder()"><i class="fa-solid fa-paper-plane me-1"></i>Kirim Pesanan</button>
+  </div>
+
+  <div class="footer-note" id="footerNote">Terima kasih telah berbelanja di MAXBOXS.STORE ❤️</div>
+</div>
+
+<script>
+const LS_KEYS = { products:'maxbox_products', settings:'maxbox_settings', pending:'maxbox_pending_orders' };
+function loadLS(key, fallback){ try{ const v = localStorage.getItem(key); return v?JSON.parse(v):fallback; }catch(e){ return fallback; } }
+function saveLS(key, val){ localStorage.setItem(key, JSON.stringify(val)); }
+function uid(){ return 'id'+Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
+function formatRupiah(n){ n = Math.round(Number(n)||0); return 'Rp'+n.toLocaleString('id-ID'); }
+
+const defaultProducts = [
+  {id:'p1', name:'Ganci Panjang', price:12000},
+  {id:'p2', name:'Ganci Bentuk', price:12000},
+  {id:'p3', name:'Pin', price:15000},
+];
+let products = loadLS(LS_KEYS.products, defaultProducts);
+if(!products || products.length===0) products = defaultProducts;
+
+let settings = loadLS(LS_KEYS.settings, {
+  storeName:'MAXBOXS.STORE', logo:'', wa:'', address:'', footer:'Terima kasih telah berbelanja di MAXBOXS.STORE ❤️'
+});
+
+function applyBranding(){
+  document.getElementById('heroStoreName').textContent = settings.storeName || 'MAXBOXS.STORE';
+  document.title = 'Form Pesanan — ' + (settings.storeName || 'MAXBOXS.STORE');
+  document.getElementById('footerNote').textContent = settings.footer || 'Terima kasih telah berbelanja ❤️';
+  const logoEl = document.getElementById('heroLogo');
+  logoEl.innerHTML = settings.logo ? `<img src="${settings.logo}">` : `<i class="fa-solid fa-box"></i>`;
+}
+
+function addItemRow(){
+  const rowId = uid();
+  const wrapper = document.getElementById('itemsWrapper');
+  const div = document.createElement('div');
+  div.className = 'item-row';
+  div.dataset.rowId = rowId;
+  div.innerHTML = `
+    <div class="row g-2 align-items-end">
+      <div class="col-6">
+        <label class="form-label mb-1">Produk</label>
+        <select class="form-select item-product-select" onchange="onProductChange('${rowId}')">
+          <option value="">-- Pilih Produk --</option>
+          ${products.map(p=>`<option value="${p.id}">${p.name} (${formatRupiah(p.price)})</option>`).join('')}
+        </select>
+      </div>
+      <div class="col-3">
+        <label class="form-label mb-1">Jumlah</label>
+        <input type="number" class="form-control item-qty" value="1" min="1" oninput="calcTotals()">
+      </div>
+      <div class="col-2">
+        <label class="form-label mb-1">Subtotal</label>
+        <input type="text" class="form-control item-subtotal" readonly style="background:#eef1f8;">
+      </div>
+      <div class="col-1 text-end">
+        <button class="btn btn-light border text-danger" onclick="removeItemRow('${rowId}')"><i class="fa-solid fa-trash"></i></button>
+      </div>
+    </div>`;
+  wrapper.appendChild(div);
+  calcTotals();
+}
+function removeItemRow(rowId){
+  const el = document.querySelector(`.item-row[data-row-id="${rowId}"]`);
+  if(el) el.remove();
+  if(document.querySelectorAll('.item-row').length===0) addItemRow();
+  calcTotals();
+}
+function onProductChange(rowId){ calcTotals(); }
+
+function calcTotals(){
+  let qtyTotal=0, total=0;
+  document.querySelectorAll('.item-row').forEach(row=>{
+    const pid = row.querySelector('.item-product-select').value;
+    const p = products.find(x=>x.id===pid);
+    const qty = Number(row.querySelector('.item-qty').value)||0;
+    const price = p ? p.price : 0;
+    const sub = price*qty;
+    row.querySelector('.item-subtotal').value = pid ? formatRupiah(sub) : '-';
+    qtyTotal += qty; total += sub;
+  });
+  document.getElementById('sumQty').textContent = qtyTotal;
+  document.getElementById('sumTotal').textContent = formatRupiah(total);
+  return {qtyTotal, total};
+}
+
+function collectItems(){
+  const items = [];
+  document.querySelectorAll('.item-row').forEach(row=>{
+    const pid = row.querySelector('.item-product-select').value;
+    const p = products.find(x=>x.id===pid);
+    const qty = Number(row.querySelector('.item-qty').value)||0;
+    if(p && qty>0){ items.push({ productId:pid, name:p.name, price:p.price, qty, subtotal:p.price*qty }); }
+  });
+  return items;
+}
+
+function submitOrder(){
+  const name = document.getElementById('custName').value.trim();
+  const wa = document.getElementById('custWa').value.trim();
+  const address = document.getElementById('custAddress').value.trim();
+  const note = document.getElementById('custNote').value.trim();
+  const items = collectItems();
+  const method = document.getElementById('payMethod').value;
+
+  if(!name || !wa || !address){
+    Swal.fire({icon:'warning', title:'Lengkapi Data', text:'Nama, WhatsApp, dan alamat wajib diisi.'});
+    return;
+  }
+  if(items.length===0){
+    Swal.fire({icon:'warning', title:'Belum Ada Produk', text:'Pilih minimal 1 produk untuk melanjutkan.'});
+    return;
+  }
+
+  const totals = calcTotals();
+  const pendingId = uid();
+  const refCode = 'REQ'+Date.now().toString().slice(-8);
+
+  const order = {
+    id: pendingId,
+    refCode,
+    customerName:name, customerWa:wa, customerAddress:address, note,
+    items, qtyTotal: totals.qtyTotal, estimatedTotal: totals.total,
+    paymentMethod: method,
+    createdAt: Date.now(),
+    status: 'baru'
+  };
+
+  const pending = loadLS(LS_KEYS.pending, []);
+  pending.push(order);
+  saveLS(LS_KEYS.pending, pending);
+
+  const itemLines = items.map(it=>`- ${it.name} x${it.qty} = ${formatRupiah(it.subtotal)}`).join('%0A');
+  const waText = encodeURIComponent(`Halo ${settings.storeName||'MAXBOXS.STORE'}, saya ingin memesan:%0A%0A`).replace(/%25/g,'%');
+  const waMessage = `Halo ${settings.storeName||'MAXBOXS.STORE'}, saya ingin memesan (Ref: ${refCode}):%0A%0ANama: ${name}%0AWhatsApp: ${wa}%0AAlamat: ${address}%0A%0AProduk:%0A${itemLines}%0A%0AEstimasi Total: ${formatRupiah(totals.total)}%0AMetode Bayar: ${method}${note? '%0ACatatan: '+note : ''}`;
+  const waLink = settings.wa ? `https://wa.me/${settings.wa.replace(/[^0-9]/g,'')}?text=${waMessage}` : `https://wa.me/6287774991692/?text=${waMessage}`;
+
+  Swal.fire({
+    icon:'success',
+    title:'Pesanan Terkirim!',
+    html:`Nomor referensi pesanan kamu: <b>${refCode}</b><br><br>Agar diproses lebih cepat, kirim juga konfirmasi via WhatsApp ke toko ya.`,
+    confirmButtonText:'Kirim via WhatsApp',
+    showCancelButton:true,
+    cancelButtonText:'Nanti Saja'
+  }).then(r=>{
+    if(r.isConfirmed){ window.open(waLink, '_blank'); }
+    resetForm();
+  });
+}
+
+function resetForm(){
+  document.getElementById('custName').value='';
+  document.getElementById('custWa').value='';
+  document.getElementById('custAddress').value='';
+  document.getElementById('custNote').value='';
+  document.getElementById('itemsWrapper').innerHTML='';
+  addItemRow();
+}
+
+function init(){
+  applyBranding();
+  addItemRow();
+}
+window.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>

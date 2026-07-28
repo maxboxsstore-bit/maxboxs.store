@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Keuangan — MAXBOXS.STORE</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.10.5/sweetalert2.all.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{
+  --mb-blue:#1957e0; --mb-blue-dark:#0f3fae; --mb-blue-light:#eaf1ff;
+  --mb-ink:#10182c; --mb-ink-soft:#5b6478; --mb-line:#e7ebf3; --mb-bg:#f6f8fc; --mb-white:#fff;
+  --mb-green:#17a673; --mb-amber:#e79a1a; --mb-red:#e14848;
+  --radius:14px; --shadow:0 4px 22px rgba(16,24,44,.06);
+}
+[data-theme="dark"]{
+  --mb-blue:#4d84ff; --mb-blue-dark:#3a6ce0; --mb-blue-light:#16233f;
+  --mb-ink:#eef2fb; --mb-ink-soft:#9aa6c2; --mb-line:#232f4a; --mb-bg:#0b1120; --mb-white:#121a2e;
+  --shadow:0 4px 22px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box;}
+body{ font-family:'Plus Jakarta Sans',sans-serif; background:var(--mb-bg); color:var(--mb-ink); transition:background .25s,color .25s; }
+h1,h2,h3,h4,.brand-font{ font-family:'Sora',sans-serif; }
+
+.mb-shell{ display:flex; min-height:100vh; }
+.mb-sidebar{ width:250px; flex-shrink:0; background:var(--mb-white); border-right:1px solid var(--mb-line); padding:22px 16px; position:fixed; top:0; bottom:0; left:0; overflow-y:auto; z-index:1040; transition:transform .25s, background .25s; }
+.mb-brand{ display:flex; align-items:center; gap:10px; padding:6px 10px 20px; text-decoration:none; color:inherit; }
+.mb-brand-icon{ width:40px; height:40px; border-radius:11px; background:linear-gradient(135deg,var(--mb-blue),var(--mb-blue-dark)); display:flex; align-items:center; justify-content:center; overflow:hidden; flex-shrink:0; }
+.mb-brand-icon img{ width:100%; height:100%; object-fit:contain; background:#fff; padding:3px; }
+.mb-brand-icon i{ color:#fff; font-size:17px; }
+.mb-brand b{ display:block; font-size:14.5px; }
+.mb-brand span{ font-size:10.5px; color:var(--mb-ink-soft); }
+
+.mb-nav .nav-link{ display:flex; align-items:center; gap:11px; color:var(--mb-ink-soft); font-weight:600; font-size:14px; padding:10px 13px; border-radius:10px; margin-bottom:4px; cursor:pointer; }
+.mb-nav .nav-link i{ width:18px; text-align:center; font-size:14px; }
+.mb-nav .nav-link:hover{ background:var(--mb-blue-light); color:var(--mb-blue); }
+.mb-nav .nav-link.active{ background:linear-gradient(135deg,var(--mb-blue),var(--mb-blue-dark)); color:#fff; }
+.mb-nav-divider{ font-size:10.5px; text-transform:uppercase; letter-spacing:.5px; color:var(--mb-ink-soft); font-weight:700; margin:16px 10px 8px; }
+
+.mb-main{ margin-left:250px; flex:1; min-width:0; padding:20px 24px 60px; }
+.mb-topbar{ display:flex; align-items:center; justify-content:space-between; background:var(--mb-white); border:1px solid var(--mb-line); border-radius:var(--radius); padding:13px 18px; margin-bottom:20px; box-shadow:var(--shadow); }
+.mb-page{ display:none; animation:fadeIn .3s ease; } .mb-page.active{ display:block; }
+@keyframes fadeIn{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
+
+.mb-card{ background:var(--mb-white); border:1px solid var(--mb-line); border-radius:var(--radius); box-shadow:var(--shadow); }
+.mb-stat{ background:var(--mb-white); border:1px solid var(--mb-line); border-radius:var(--radius); padding:18px; box-shadow:var(--shadow); }
+.mb-stat .ic{ width:42px; height:42px; border-radius:11px; display:flex; align-items:center; justify-content:center; font-size:17px; color:#fff; margin-bottom:12px; }
+.mb-stat h3{ font-size:21px; margin:0; font-weight:800; }
+.mb-stat p{ margin:2px 0 0; color:var(--mb-ink-soft); font-size:12.5px; font-weight:600; }
+
+.section-title{ font-weight:800; font-size:18px; margin-bottom:2px; }
+.section-sub{ color:var(--mb-ink-soft); font-size:13px; margin-bottom:16px; }
+
+.table thead th{ font-size:11.5px; text-transform:uppercase; letter-spacing:.4px; color:var(--mb-ink-soft); border-bottom:2px solid var(--mb-line); font-weight:700; }
+.table td, .table th{ vertical-align:middle; color:var(--mb-ink); border-color:var(--mb-line); font-size:13.5px; }
+.table-hover>tbody>tr:hover>*{ background:var(--mb-blue-light); }
+
+.badge-type{ font-size:11px; font-weight:700; padding:5px 10px; border-radius:99px; }
+.badge-in{ background:#e4f7ef; color:var(--mb-green); }
+.badge-out{ background:#fdeaea; color:var(--mb-red); }
+[data-theme="dark"] .badge-in{ background:#0f2b21; } [data-theme="dark"] .badge-out{ background:#2c1414; }
+
+.btn-mb{ background:linear-gradient(135deg,var(--mb-blue),var(--mb-blue-dark)); border:none; color:#fff; font-weight:700; border-radius:10px; padding:9px 16px; font-size:13.5px; }
+.btn-mb:hover{ color:#fff; opacity:.92; }
+.btn-mb-green{ background:linear-gradient(135deg,#17a673,#0e7a52); border:none; color:#fff; font-weight:700; border-radius:10px; padding:9px 16px; font-size:13.5px; }
+.btn-mb-green:hover{ color:#fff; opacity:.92; }
+.btn-mb-red{ background:linear-gradient(135deg,#e14848,#a92e2e); border:none; color:#fff; font-weight:700; border-radius:10px; padding:9px 16px; font-size:13.5px; }
+.btn-mb-red:hover{ color:#fff; opacity:.92; }
+.btn-outline-mb{ border:1.5px solid var(--mb-blue); color:var(--mb-blue); background:transparent; font-weight:700; border-radius:10px; padding:8px 14px; font-size:13.5px; }
+.btn-outline-mb:hover{ background:var(--mb-blue-light); color:var(--mb-blue); }
+
+.form-control, .form-select{ background:var(--mb-white); border:1.5px solid var(--mb-line); color:var(--mb-ink); border-radius:10px; font-size:14px; padding:8px 12px; }
+.form-control:focus, .form-select:focus{ border-color:var(--mb-blue); box-shadow:0 0 0 3px rgba(25,87,224,.12); background:var(--mb-white); color:var(--mb-ink); }
+label.form-label{ font-weight:700; font-size:12.5px; color:var(--mb-ink-soft); }
+
+.empty-state{ text-align:center; padding:40px 20px; color:var(--mb-ink-soft); }
+.empty-state i{ font-size:38px; margin-bottom:10px; color:var(--mb-line); display:block; }
+
+.mb-burger{ display:none; }
+@media (max-width:991px){
+  .mb-sidebar{ transform:translateX(-100%); } .mb-sidebar.show{ transform:translateX(0); }
+  .mb-main{ margin-left:0; padding:14px; } .mb-burger{ display:inline-flex; }
+  .mb-backdrop{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.35); z-index:1030; } .mb-backdrop.show{ display:block; }
+}
+.chart-wrap{ position:relative; height:280px; }
+</style>
+</head>
+<body>
+
+<div class="mb-backdrop" id="mbBackdrop" onclick="toggleSidebar(false)"></div>
+<div class="mb-shell">
+
+  <aside class="mb-sidebar" id="mbSidebar">
+    <a href="dashboard.html" class="mb-brand">
+      <div class="mb-brand-icon" id="sidebarLogo"><i class="fa-solid fa-box"></i></div>
+      <div><b id="sidebarStoreName" class="brand-font">MAXBOXS.STORE</b><span>Modul Keuangan</span></div>
+    </a>
+    <nav class="mb-nav">
+      <a class="nav-link active" data-page="ringkasan"><i class="fa-solid fa-chart-pie"></i> Ringkasan</a>
+      <a class="nav-link" data-page="pengeluaran"><i class="fa-solid fa-arrow-trend-down"></i> Pengeluaran</a>
+      <a class="nav-link" data-page="pemasukan"><i class="fa-solid fa-arrow-trend-up"></i> Pemasukan Lain</a>
+      <a class="nav-link" data-page="bukukas"><i class="fa-solid fa-book"></i> Buku Kas</a>
+      <a class="nav-link" data-page="laporan"><i class="fa-solid fa-file-invoice-dollar"></i> Laporan Bulanan</a>
+      <div class="mb-nav-divider">Navigasi</div>
+      <a class="nav-link" href="dashboard.html"><i class="fa-solid fa-house"></i> Dashboard Utama</a>
+      <a class="nav-link" href="index.html"><i class="fa-solid fa-cash-register"></i> Kasir &amp; Invoice</a>
+      <a class="nav-link" href="paket.html"><i class="fa-solid fa-truck-fast"></i> Paket &amp; Kurir</a>
+    </nav>
+  </aside>
+
+  <main class="mb-main">
+    <div class="mb-topbar">
+      <div class="d-flex align-items-center gap-3">
+        <button class="btn btn-light border mb-burger" onclick="toggleSidebar(true)"><i class="fa-solid fa-bars"></i></button>
+        <div class="fw-bold" id="pageTitle" style="font-size:15px;">Ringkasan Keuangan</div>
+      </div>
+      <button class="btn btn-light border" id="darkToggle"><i class="fa-solid fa-moon"></i></button>
+    </div>
+
+    <!-- ===================== RINGKASAN ===================== -->
+    <section class="mb-page active" id="page-ringkasan">
+      <div class="section-title">Ringkasan Keuangan</div>
+      <div class="section-sub">Pantau arus kas MAXBOXS.STORE secara menyeluruh.</div>
+
+      <div class="row g-3 mb-4">
+        <div class="col-6 col-lg-3">
+          <div class="mb-stat"><div class="ic" style="background:linear-gradient(135deg,#17a673,#0e7a52)"><i class="fa-solid fa-money-bill-trend-up"></i></div>
+            <h3 id="statIncome">Rp0</h3><p>Total Pemasukan</p></div>
+        </div>
+        <div class="col-6 col-lg-3">
+          <div class="mb-stat"><div class="ic" style="background:linear-gradient(135deg,#e14848,#a92e2e)"><i class="fa-solid fa-money-bill-trend-down"></i></div>
+            <h3 id="statExpense">Rp0</h3><p>Total Pengeluaran</p></div>
+        </div>
+        <div class="col-6 col-lg-3">
+          <div class="mb-stat"><div class="ic" style="background:linear-gradient(135deg,var(--mb-blue),var(--mb-blue-dark))"><i class="fa-solid fa-wallet"></i></div>
+            <h3 id="statSaldo">Rp0</h3><p>Saldo Kas</p></div>
+        </div>
+        <div class="col-6 col-lg-3">
+          <div class="mb-stat"><div class="ic" style="background:linear-gradient(135deg,#e79a1a,#b5760a)"><i class="fa-solid fa-scale-balanced"></i></div>
+            <h3 id="statProfit">Rp0</h3><p>Laba Bersih (Bulan Ini)</p></div>
+        </div>
+      </div>
+
+      <div class="mb-card p-4 mb-3">
+        <div class="fw-bold mb-3">Grafik Pemasukan vs Pengeluaran (6 Bulan Terakhir)</div>
+        <div class="chart-wrap"><canvas id="financeChart"></canvas></div>
+      </div>
+
+      <div class="mb-card p-4">
+        <div class="fw-bold mb-3">Transaksi Terbaru</div>
+        <div class="table-responsive">
+          <table class="table table-hover mb-0">
+            <thead><tr><th>Tanggal</th><th>Keterangan</th><th>Tipe</th><th class="text-end">Nominal</th></tr></thead>
+            <tbody id="recentTxBody"></tbody>
+          </table>
+        </div>
+        <div class="empty-state d-none" id="recentTxEmpty"><i class="fa-solid fa-receipt"></i>Belum ada transaksi</div>
+      </div>
+    </section>
+
+    <!-- ===================== PENGELUARAN ===================== -->
+    <section class="mb-page" id="page-pengeluaran">
+      <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3">
+        <div><div class="section-title">Pengeluaran</div><div class="section-sub mb-0">Catat semua biaya operasional usaha</div></div>
+        <button class="btn btn-mb-red" onclick="openExpenseModal()"><i class="fa-solid fa-plus me-1"></i>Tambah Pengeluaran</button>
+      </div>
+      <div class="mb-card p-3 mb-3">
+        <div class="row g-2">
+          <div class="col-md-5"><input type="text" class="form-control" id="searchExpense" placeholder="Cari kategori / catatan..."></div>
+          <div class="col-md-3">
+            <select class="form-select" id="filterExpenseCategory"><option value="">Semua Kategori</option></select>
+          </div>
+          <div class="col-md-4"><input type="month" class="form-control" id="filterExpenseMonth"></div>
+        </div>
+      </div>
+      <div class="mb-card p-3">
+        <div class="table-responsive">
+          <table class="table table-hover mb-0">
+            <thead><tr><th>Tanggal</th><th>Kategori</th><th>Catatan</th><th class="text-end">Nominal</th><th class="text-end">Aksi</th></tr></thead>
+            <tbody id="expenseBody"></tbody>
+          </table>
+        </div>
+        <div class="empty-state d-none" id="expenseEmpty"><i class="fa-solid fa-receipt"></i>Belum ada pengeluaran</div>
+      </div>
+    </section>
+
+    <!-- ===================== PEMASUKAN LAIN ===================== -->
+    <section class="mb-page" id="page-pemasukan">
+      <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3">
+        <div><div class="section-title">Pemasukan Lain</div><div class="section-sub mb-0">Pemasukan di luar penjualan kasir (mis. modal, investasi, lainnya). Penjualan dari Kasir sudah masuk otomatis.</div></div>
+        <button class="btn btn-mb-green" onclick="openIncomeModal()"><i class="fa-solid fa-plus me-1"></i>Tambah Pemasukan</button>
+      </div>
+      <div class="mb-card p-3">
+        <div class="table-responsive">
+          <table class="table table-hover mb-0">
+            <thead><tr><th>Tanggal</th><th>Sumber</th><th>Catatan</th><th class="text-end">Nominal</th><th class="text-end">Aksi</th></tr></thead>
+            <tbody id="incomeBody"></tbody>
+          </table>
+        </div>
+        <div class="empty-state d-none" id="incomeEmpty"><i class="fa-solid fa-hand-holding-dollar"></i>Belum ada pemasukan lain</div>
+      </div>
+    </section>
+
+    <!-- ===================== BUKU KAS ===================== -->
+    <section class="mb-page" id="page-bukukas">
+      <div class="section-title">Buku Kas</div>
+      <div class="section-sub">Seluruh arus kas masuk &amp; keluar, tersusun berdasarkan tanggal beserta saldo berjalan.</div>
+      <div class="mb-card p-3 mb-3">
+        <div class="row g-2">
+          <div class="col-md-6"><input type="text" class="form-control" id="searchCash" placeholder="Cari keterangan..."></div>
+          <div class="col-md-3">
+            <select class="form-select" id="filterCashType">
+              <option value="">Semua Tipe</option><option value="in">Pemasukan</option><option value="out">Pengeluaran</option>
+            </select>
+          </div>
+          <div class="col-md-3"><button class="btn btn-outline-mb w-100" onclick="exportCashflowCSV()"><i class="fa-solid fa-file-csv me-1"></i>Export CSV</button></div>
+        </div>
+      </div>
+      <div class="mb-card p-3">
+        <div class="table-responsive">
+          <table class="table table-hover mb-0">
+            <thead><tr><th>Tanggal</th><th>Keterangan</th><th>Tipe</th><th class="text-end">Nominal</th><th class="text-end">Saldo</th></tr></thead>
+            <tbody id="cashflowBody"></tbody>
+          </table>
+        </div>
+        <div class="empty-state d-none" id="cashflowEmpty"><i class="fa-solid fa-book"></i>Belum ada catatan kas</div>
+      </div>
+    </section>
+
+    <!-- ===================== LAPORAN BULANAN ===================== -->
+    <section class="mb-page" id="page-laporan">
+      <div class="section-title">Laporan Laba Rugi Bulanan</div>
+      <div class="section-sub">Pilih periode untuk melihat ringkasan laba rugi usaha.</div>
+      <div class="mb-card p-3 mb-3 d-flex align-items-center gap-2 flex-wrap">
+        <input type="month" class="form-control" id="reportMonth" style="max-width:220px;">
+        <button class="btn btn-mb" onclick="renderReport()"><i class="fa-solid fa-magnifying-glass-chart me-1"></i>Tampilkan</button>
+      </div>
+      <div class="row g-3">
+        <div class="col-lg-6">
+          <div class="mb-card p-4">
+            <div class="fw-bold mb-3">Ringkasan Periode</div>
+            <div class="d-flex justify-content-between py-2 border-bottom" style="border-color:var(--mb-line)!important;"><span class="text-muted">Penjualan (Kasir)</span><b id="repSales">Rp0</b></div>
+            <div class="d-flex justify-content-between py-2 border-bottom" style="border-color:var(--mb-line)!important;"><span class="text-muted">Pemasukan Lain</span><b id="repIncomeExtra">Rp0</b></div>
+            <div class="d-flex justify-content-between py-2 border-bottom" style="border-color:var(--mb-line)!important;"><span class="fw-bold">Total Pemasukan</span><b class="text-success" id="repTotalIncome">Rp0</b></div>
+            <div class="d-flex justify-content-between py-2 border-bottom" style="border-color:var(--mb-line)!important;"><span class="fw-bold">Total Pengeluaran</span><b class="text-danger" id="repTotalExpense">Rp0</b></div>
+            <div class="d-flex justify-content-between py-3" style="font-size:19px;"><span class="fw-bold">Laba / Rugi Bersih</span><b class="text-primary" id="repProfit">Rp0</b></div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="mb-card p-4">
+            <div class="fw-bold mb-3">Rincian Pengeluaran per Kategori</div>
+            <div id="repCategoryList"></div>
+            <div class="empty-state d-none" id="repCategoryEmpty"><i class="fa-solid fa-layer-group"></i>Tidak ada pengeluaran periode ini</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- MODAL PENGELUARAN -->
+<div class="modal fade" id="expenseModal" tabindex="-1">
+  <div class="modal-dialog"><div class="modal-content" style="border-radius:16px;">
+    <div class="modal-header"><h5 class="modal-title" id="expenseModalTitle">Tambah Pengeluaran</h5><button class="btn-close" data-bs-dismiss="modal"></button></div>
+    <div class="modal-body">
+      <input type="hidden" id="expenseId">
+      <div class="mb-3"><label class="form-label">Tanggal</label><input type="date" class="form-control" id="expenseDate"></div>
+      <div class="mb-3"><label class="form-label">Kategori</label>
+        <input type="text" class="form-control" id="expenseCategory" list="categoryList" placeholder="mis. Bahan Baku, Gaji, Operasional...">
+        <datalist id="categoryList">
+          <option value="Bahan Baku"><option value="Operasional"><option value="Gaji Karyawan">
+          <option value="Transportasi"><option value="Marketing"><option value="Sewa Tempat"><option value="Lainnya">
+        </datalist>
+      </div>
+      <div class="mb-3"><label class="form-label">Nominal (Rp)</label><input type="number" class="form-control" id="expenseAmount"></div>
+      <div class="mb-3"><label class="form-label">Catatan (opsional)</label><textarea class="form-control" id="expenseNote" rows="2"></textarea></div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-light border" data-bs-dismiss="modal">Batal</button><button class="btn btn-mb-red" onclick="saveExpense()">Simpan</button></div>
+  </div></div>
+</div>
+
+<!-- MODAL PEMASUKAN -->
+<div class="modal fade" id="incomeModal" tabindex="-1">
+  <div class="modal-dialog"><div class="modal-content" style="border-radius:16px;">
+    <div class="modal-header"><h5 class="modal-title" id="incomeModalTitle">Tambah Pemasukan Lain</h5><button class="btn-close" data-bs-dismiss="modal"></button></div>
+    <div class="modal-body">
+      <input type="hidden" id="incomeId">
+      <div class="mb-3"><label class="form-label">Tanggal</label><input type="date" class="form-control" id="incomeDate"></div>
+      <div class="mb-3"><label class="form-label">Sumber Pemasukan</label><input type="text" class="form-control" id="incomeSource" placeholder="mis. Modal Tambahan, Investasi, dll"></div>
+      <div class="mb-3"><label class="form-label">Nominal (Rp)</label><input type="number" class="form-control" id="incomeAmount"></div>
+      <div class="mb-3"><label class="form-label">Catatan (opsional)</label><textarea class="form-control" id="incomeNote" rows="2"></textarea></div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-light border" data-bs-dismiss="modal">Batal</button><button class="btn btn-mb-green" onclick="saveIncome()">Simpan</button></div>
+  </div></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script>
+function loadLS(key, fallback){ try{ const v = localStorage.getItem(key); return v?JSON.parse(v):fallback; }catch(e){ return fallback; } }
+function saveLS(key, val){ localStorage.setItem(key, JSON.stringify(val)); }
+function uid(){ return 'id'+Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
+function formatRupiah(n){ n = Math.round(Number(n)||0); return 'Rp'+n.toLocaleString('id-ID'); }
+function todayStr(){ return new Date().toISOString().slice(0,10); }
+function formatDateID(dateStr){ return new Date(dateStr).toLocaleDateString('id-ID', {day:'2-digit', month:'short', year:'numeric'}); }
+
+const settings = loadLS('maxbox_settings', {storeName:'MAXBOXS.STORE', logo:''});
+const orders = loadLS('maxbox_orders', []);
+let expenses = loadLS('maxbox_expenses', []);
+let incomeExtra = loadLS('maxbox_income_extra', []);
+
+function persist(){ saveLS('maxbox_expenses', expenses); saveLS('maxbox_income_extra', incomeExtra); }
+
+function applyBranding(){
+  document.getElementById('sidebarStoreName').textContent = settings.storeName || 'MAXBOXS.STORE';
+  document.title = 'Keuangan — ' + (settings.storeName || 'MAXBOXS.STORE');
+  document.getElementById('sidebarLogo').innerHTML = settings.logo ? `<img src="${settings.logo}">` : `<i class="fa-solid fa-box"></i>`;
+}
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  document.getElementById('darkToggle').innerHTML = theme==='dark' ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
+  saveLS('maxbox_theme', theme);
+}
+document.getElementById('darkToggle').addEventListener('click', ()=>{
+  const cur = document.documentElement.getAttribute('data-theme')==='dark' ? 'light':'dark';
+  applyTheme(cur);
+});
+
+/* ---------------- Navigation ---------------- */
+const pageTitles = { ringkasan:'Ringkasan Keuangan', pengeluaran:'Pengeluaran', pemasukan:'Pemasukan Lain', bukukas:'Buku Kas', laporan:'Laporan Bulanan' };
+function goPage(page){
+  document.querySelectorAll('.mb-page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  document.querySelectorAll('.mb-nav .nav-link[data-page]').forEach(a=>a.classList.remove('active'));
+  const el = document.querySelector(`.mb-nav .nav-link[data-page="${page}"]`);
+  if(el) el.classList.add('active');
+  document.getElementById('pageTitle').textContent = pageTitles[page];
+  toggleSidebar(false);
+  if(page==='ringkasan') renderRingkasan();
+  if(page==='pengeluaran') renderExpenses();
+  if(page==='pemasukan') renderIncomes();
+  if(page==='bukukas') renderCashflow();
+  if(page==='laporan') { document.getElementById('reportMonth').value = new Date().toISOString().slice(0,7); renderReport(); }
+}
+document.querySelectorAll('.mb-nav .nav-link[data-page]').forEach(a=> a.addEventListener('click', ()=>goPage(a.dataset.page)));
+function toggleSidebar(show){ document.getElementById('mbSidebar').classList.toggle('show', show); document.getElementById('mbBackdrop').classList.toggle('show', show); }
+
+/* ---------------- Data helper: gabungan semua transaksi ---------------- */
+function getAllTransactions(){
+  let tx = [];
+  orders.forEach(o=>{
+    if(Number(o.paidAmount)>0){
+      tx.push({ id:'sale-'+o.id, date:o.date, type:'in', title:`Penjualan ${o.invoice}`, amount:Number(o.paidAmount), createdAt:o.createdAt });
+    }
+  });
+  incomeExtra.forEach(e=> tx.push({ id:'inc-'+e.id, date:e.date, type:'in', title:`${e.source}${e.note? ' — '+e.note:''}`, amount:Number(e.amount), createdAt:e.createdAt }));
+  expenses.forEach(e=> tx.push({ id:'exp-'+e.id, date:e.date, type:'out', title:`${e.category}${e.note? ' — '+e.note:''}`, amount:Number(e.amount), createdAt:e.createdAt }));
+  return tx.sort((a,b)=> (a.createdAt||0)-(b.createdAt||0));
+}
+
+/* ===================== RINGKASAN ===================== */
+let financeChart;
+function renderRingkasan(){
+  const tx = getAllTransactions();
+  const totalIn = tx.filter(t=>t.type==='in').reduce((s,t)=>s+t.amount,0);
+  const totalOut = tx.filter(t=>t.type==='out').reduce((s,t)=>s+t.amount,0);
+  document.getElementById('statIncome').textContent = formatRupiah(totalIn);
+  document.getElementById('statExpense').textContent = formatRupiah(totalOut);
+  document.getElementById('statSaldo').textContent = formatRupiah(totalIn-totalOut);
+
+  const curMonth = new Date().toISOString().slice(0,7);
+  const monthIn = tx.filter(t=>t.type==='in' && t.date && t.date.slice(0,7)===curMonth).reduce((s,t)=>s+t.amount,0);
+  const monthOut = tx.filter(t=>t.type==='out' && t.date && t.date.slice(0,7)===curMonth).reduce((s,t)=>s+t.amount,0);
+  document.getElementById('statProfit').textContent = formatRupiah(monthIn-monthOut);
+
+  const recent = [...tx].sort((a,b)=>(b.createdAt||0)-(a.createdAt||0)).slice(0,8);
+  const body = document.getElementById('recentTxBody');
+  body.innerHTML = '';
+  document.getElementById('recentTxEmpty').classList.toggle('d-none', recent.length>0);
+  recent.forEach(t=>{
+    body.insertAdjacentHTML('beforeend', `
+      <tr><td>${formatDateID(t.date)}</td><td>${t.title}</td>
+      <td><span class="badge-type ${t.type==='in'?'badge-in':'badge-out'}">${t.type==='in'?'Masuk':'Keluar'}</span></td>
+      <td class="text-end ${t.type==='in'?'text-success':'text-danger'} fw-semibold">${t.type==='in'?'+':'-'} ${formatRupiah(t.amount)}</td></tr>`);
+  });
+
+  renderChart(tx);
+}
+function renderChart(tx){
+  const months = [];
+  const now = new Date();
+  for(let i=5;i>=0;i--){
+    const d = new Date(now.getFullYear(), now.getMonth()-i, 1);
+    months.push(d.toISOString().slice(0,7));
+  }
+  const inData = months.map(m=> tx.filter(t=>t.type==='in' && t.date && t.date.slice(0,7)===m).reduce((s,t)=>s+t.amount,0));
+  const outData = months.map(m=> tx.filter(t=>t.type==='out' && t.date && t.date.slice(0,7)===m).reduce((s,t)=>s+t.amount,0));
+  const labels = months.map(m=>{ const [y,mo]=m.split('-'); return new Date(y,mo-1,1).toLocaleDateString('id-ID',{month:'short',year:'2-digit'}); });
+
+  const ctx = document.getElementById('financeChart').getContext('2d');
+  if(financeChart) financeChart.destroy();
+  financeChart = new Chart(ctx, {
+    type:'bar',
+    data:{ labels, datasets:[
+      { label:'Pemasukan', data:inData, backgroundColor:'#17a673', borderRadius:6 },
+      { label:'Pengeluaran', data:outData, backgroundColor:'#e14848', borderRadius:6 },
+    ]},
+    options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{position:'bottom'}}, scales:{ y:{ ticks:{ callback:v=>formatRupiah(v) } } } }
+  });
+}
+
+/* ===================== PENGELUARAN ===================== */
+function refreshCategoryFilter(){
+  const sel = document.getElementById('filterExpenseCategory');
+  const cats = [...new Set(expenses.map(e=>e.category))];
+  sel.innerHTML = '<option value="">Semua Kategori</option>' + cats.map(c=>`<option value="${c}">${c}</option>`).join('');
+}
+function renderExpenses(){
+  const search = document.getElementById('searchExpense').value.toLowerCase();
+  const cat = document.getElementById('filterExpenseCategory').value;
+  const month = document.getElementById('filterExpenseMonth').value;
+  let list = [...expenses].sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+  list = list.filter(e=>{
+    const m1 = (e.category+' '+(e.note||'')).toLowerCase().includes(search);
+    const m2 = !cat || e.category===cat;
+    const m3 = !month || e.date.slice(0,7)===month;
+    return m1&&m2&&m3;
+  });
+  const body = document.getElementById('expenseBody');
+  body.innerHTML = '';
+  document.getElementById('expenseEmpty').classList.toggle('d-none', list.length>0);
+  list.forEach(e=>{
+    body.insertAdjacentHTML('beforeend', `
+      <tr><td>${formatDateID(e.date)}</td><td><span class="badge-type badge-out">${e.category}</span></td><td>${e.note||'-'}</td>
+      <td class="text-end fw-semibold text-danger">${formatRupiah(e.amount)}</td>
+      <td class="text-end">
+        <button class="btn btn-sm btn-light border me-1" onclick="openExpenseModal('${e.id}')"><i class="fa-solid fa-pen"></i></button>
+        <button class="btn btn-sm btn-light border text-danger" onclick="deleteExpense('${e.id}')"><i class="fa-solid fa-trash"></i></button>
+      </td></tr>`);
+  });
+  refreshCategoryFilter();
+}
+['searchExpense','filterExpenseCategory','filterExpenseMonth'].forEach(id=>{
+  document.getElementById(id).addEventListener('input', renderExpenses);
+  document.getElementById(id).addEventListener('change', renderExpenses);
+});
+
+let expenseModal;
+function openExpenseModal(id=''){
+  document.getElementById('expenseId').value = id;
+  if(id){
+    const e = expenses.find(x=>x.id===id);
+    document.getElementById('expenseModalTitle').textContent = 'Edit Pengeluaran';
+    document.getElementById('expenseDate').value = e.date;
+    document.getElementById('expenseCategory').value = e.category;
+    document.getElementById('expenseAmount').value = e.amount;
+    document.getElementById('expenseNote').value = e.note||'';
+  }else{
+    document.getElementById('expenseModalTitle').textContent = 'Tambah Pengeluaran';
+    document.getElementById('expenseDate').value = todayStr();
+    document.getElementById('expenseCategory').value = '';
+    document.getElementById('expenseAmount').value = '';
+    document.getElementById('expenseNote').value = '';
+  }
+  expenseModal = expenseModal || new bootstrap.Modal('#expenseModal');
+  expenseModal.show();
+}
+function saveExpense(){
+  const id = document.getElementById('expenseId').value;
+  const date = document.getElementById('expenseDate').value;
+  const category = document.getElementById('expenseCategory').value.trim();
+  const amount = Number(document.getElementById('expenseAmount').value);
+  const note = document.getElementById('expenseNote').value.trim();
+  if(!date || !category || !amount){ Swal.fire({icon:'warning', title:'Lengkapi data', text:'Tanggal, kategori, dan nominal wajib diisi.'}); return; }
+  if(id){
+    const e = expenses.find(x=>x.id===id); Object.assign(e,{date,category,amount,note});
+  }else{
+    expenses.push({id:uid(), date, category, amount, note, createdAt:Date.now()});
+  }
+  persist(); renderExpenses(); renderRingkasan();
+  expenseModal.hide();
+  Swal.fire({icon:'success', title:'Tersimpan', timer:1100, showConfirmButton:false});
+}
+function deleteExpense(id){
+  Swal.fire({icon:'warning', title:'Hapus pengeluaran ini?', showCancelButton:true, confirmButtonColor:'#e14848', confirmButtonText:'Hapus', cancelButtonText:'Batal'})
+  .then(r=>{ if(r.isConfirmed){ expenses = expenses.filter(e=>e.id!==id); persist(); renderExpenses(); renderRingkasan(); Swal.fire({icon:'success', title:'Dihapus', timer:900, showConfirmButton:false}); } });
+}
+
+/* ===================== PEMASUKAN LAIN ===================== */
+function renderIncomes(){
+  const list = [...incomeExtra].sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+  const body = document.getElementById('incomeBody');
+  body.innerHTML = '';
+  document.getElementById('incomeEmpty').classList.toggle('d-none', list.length>0);
+  list.forEach(e=>{
+    body.insertAdjacentHTML('beforeend', `
+      <tr><td>${formatDateID(e.date)}</td><td><span class="badge-type badge-in">${e.source}</span></td><td>${e.note||'-'}</td>
+      <td class="text-end fw-semibold text-success">${formatRupiah(e.amount)}</td>
+      <td class="text-end">
+        <button class="btn btn-sm btn-light border me-1" onclick="openIncomeModal('${e.id}')"><i class="fa-solid fa-pen"></i></button>
+        <button class="btn btn-sm btn-light border text-danger" onclick="deleteIncome('${e.id}')"><i class="fa-solid fa-trash"></i></button>
+      </td></tr>`);
+  });
+}
+let incomeModal;
+function openIncomeModal(id=''){
+  document.getElementById('incomeId').value = id;
+  if(id){
+    const e = incomeExtra.find(x=>x.id===id);
+    document.getElementById('incomeModalTitle').textContent = 'Edit Pemasukan';
+    document.getElementById('incomeDate').value = e.date;
+    document.getElementById('incomeSource').value = e.source;
+    document.getElementById('incomeAmount').value = e.amount;
+    document.getElementById('incomeNote').value = e.note||'';
+  }else{
+    document.getElementById('incomeModalTitle').textContent = 'Tambah Pemasukan Lain';
+    document.getElementById('incomeDate').value = todayStr();
+    document.getElementById('incomeSource').value = '';
+    document.getElementById('incomeAmount').value = '';
+    document.getElementById('incomeNote').value = '';
+  }
+  incomeModal = incomeModal || new bootstrap.Modal('#incomeModal');
+  incomeModal.show();
+}
+function saveIncome(){
+  const id = document.getElementById('incomeId').value;
+  const date = document.getElementById('incomeDate').value;
+  const source = document.getElementById('incomeSource').value.trim();
+  const amount = Number(document.getElementById('incomeAmount').value);
+  const note = document.getElementById('incomeNote').value.trim();
+  if(!date || !source || !amount){ Swal.fire({icon:'warning', title:'Lengkapi data', text:'Tanggal, sumber, dan nominal wajib diisi.'}); return; }
+  if(id){
+    const e = incomeExtra.find(x=>x.id===id); Object.assign(e,{date,source,amount,note});
+  }else{
+    incomeExtra.push({id:uid(), date, source, amount, note, createdAt:Date.now()});
+  }
+  persist(); renderIncomes(); renderRingkasan();
+  incomeModal.hide();
+  Swal.fire({icon:'success', title:'Tersimpan', timer:1100, showConfirmButton:false});
+}
+function deleteIncome(id){
+  Swal.fire({icon:'warning', title:'Hapus pemasukan ini?', showCancelButton:true, confirmButtonColor:'#e14848', confirmButtonText:'Hapus', cancelButtonText:'Batal'})
+  .then(r=>{ if(r.isConfirmed){ incomeExtra = incomeExtra.filter(e=>e.id!==id); persist(); renderIncomes(); renderRingkasan(); Swal.fire({icon:'success', title:'Dihapus', timer:900, showConfirmButton:false}); } });
+}
+
+/* ===================== BUKU KAS ===================== */
+function renderCashflow(){
+  const search = document.getElementById('searchCash').value.toLowerCase();
+  const typeF = document.getElementById('filterCashType').value;
+  let tx = getAllTransactions();
+  let running = 0;
+  tx = tx.map(t=>{ running += (t.type==='in'? t.amount : -t.amount); return {...t, saldo:running}; });
+  let display = [...tx].reverse().filter(t=>{
+    const m1 = t.title.toLowerCase().includes(search);
+    const m2 = !typeF || t.type===typeF;
+    return m1&&m2;
+  });
+  const body = document.getElementById('cashflowBody');
+  body.innerHTML = '';
+  document.getElementById('cashflowEmpty').classList.toggle('d-none', display.length>0);
+  display.forEach(t=>{
+    body.insertAdjacentHTML('beforeend', `
+      <tr><td>${formatDateID(t.date)}</td><td>${t.title}</td>
+      <td><span class="badge-type ${t.type==='in'?'badge-in':'badge-out'}">${t.type==='in'?'Masuk':'Keluar'}</span></td>
+      <td class="text-end ${t.type==='in'?'text-success':'text-danger'} fw-semibold">${t.type==='in'?'+':'-'} ${formatRupiah(t.amount)}</td>
+      <td class="text-end fw-bold">${formatRupiah(t.saldo)}</td></tr>`);
+  });
+}
+['searchCash','filterCashType'].forEach(id=>{
+  document.getElementById(id).addEventListener('input', renderCashflow);
+  document.getElementById(id).addEventListener('change', renderCashflow);
+});
+function exportCashflowCSV(){
+  const tx = getAllTransactions();
+  let running = 0;
+  const rows = [['Tanggal','Keterangan','Tipe','Nominal','Saldo']];
+  tx.forEach(t=>{ running += (t.type==='in'? t.amount : -t.amount); rows.push([t.date, t.title, t.type==='in'?'Masuk':'Keluar', t.amount, running]); });
+  const csv = rows.map(r=> r.map(c=> `"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = `buku-kas-maxboxs-${todayStr()}.csv`; a.click();
+  URL.revokeObjectURL(url);
+}
+
+/* ===================== LAPORAN BULANAN ===================== */
+function renderReport(){
+  const month = document.getElementById('reportMonth').value;
+  if(!month) return;
+  const sales = orders.filter(o=> o.date && o.date.slice(0,7)===month).reduce((s,o)=>s+(Number(o.paidAmount)||0),0);
+  const incExtra = incomeExtra.filter(e=> e.date.slice(0,7)===month).reduce((s,e)=>s+Number(e.amount),0);
+  const exp = expenses.filter(e=> e.date.slice(0,7)===month);
+  const totalExp = exp.reduce((s,e)=>s+Number(e.amount),0);
+  const totalIncome = sales + incExtra;
+  const profit = totalIncome - totalExp;
+
+  document.getElementById('repSales').textContent = formatRupiah(sales);
+  document.getElementById('repIncomeExtra').textContent = formatRupiah(incExtra);
+  document.getElementById('repTotalIncome').textContent = formatRupiah(totalIncome);
+  document.getElementById('repTotalExpense').textContent = formatRupiah(totalExp);
+  document.getElementById('repProfit').textContent = formatRupiah(profit);
+  document.getElementById('repProfit').className = profit>=0 ? 'text-success' : 'text-danger';
+
+  const byCategory = {};
+  exp.forEach(e=>{ byCategory[e.category] = (byCategory[e.category]||0) + Number(e.amount); });
+  const catList = document.getElementById('repCategoryList');
+  catList.innerHTML = '';
+  const cats = Object.keys(byCategory);
+  document.getElementById('repCategoryEmpty').classList.toggle('d-none', cats.length>0);
+  cats.sort((a,b)=>byCategory[b]-byCategory[a]).forEach(c=>{
+    const pct = totalExp>0 ? Math.round(byCategory[c]/totalExp*100) : 0;
+    catList.insertAdjacentHTML('beforeend', `
+      <div class="mb-3">
+        <div class="d-flex justify-content-between mb-1" style="font-size:13.5px;"><span class="fw-semibold">${c}</span><span>${formatRupiah(byCategory[c])} (${pct}%)</span></div>
+        <div style="height:8px;background:var(--mb-line);border-radius:99px;overflow:hidden;"><div style="height:100%;width:${pct}%;background:linear-gradient(135deg,var(--mb-blue),var(--mb-blue-dark));"></div></div>
+      </div>`);
+  });
+}
+
+/* ===================== INIT ===================== */
+function init(){
+  const theme = loadLS('maxbox_theme', 'light');
+  applyTheme(theme);
+  applyBranding();
+  renderRingkasan();
+  document.getElementById('reportMonth').value = new Date().toISOString().slice(0,7);
+}
+window.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>

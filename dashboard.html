@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Utama — MAXBOXS.STORE</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.10.5/sweetalert2.all.min.js"></script>
+<style>
+:root{
+  --mb-blue:#1957e0; --mb-blue-dark:#0f3fae; --mb-blue-light:#eaf1ff;
+  --mb-ink:#10182c; --mb-ink-soft:#5b6478; --mb-line:#e7ebf3; --mb-bg:#f6f8fc; --mb-white:#fff;
+  --mb-green:#17a673; --mb-amber:#e79a1a; --mb-red:#e14848; --mb-purple:#8b5cf6;
+  --radius:16px; --shadow:0 4px 22px rgba(16,24,44,.06);
+}
+[data-theme="dark"]{
+  --mb-blue:#4d84ff; --mb-blue-dark:#3a6ce0; --mb-blue-light:#16233f;
+  --mb-ink:#eef2fb; --mb-ink-soft:#9aa6c2; --mb-line:#232f4a; --mb-bg:#0b1120; --mb-white:#121a2e;
+  --shadow:0 4px 22px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box;}
+body{ font-family:'Plus Jakarta Sans',sans-serif; background:var(--mb-bg); color:var(--mb-ink); transition:background .25s,color .25s; }
+h1,h2,h3,.brand-font{ font-family:'Sora',sans-serif; }
+.wrap{ max-width:1180px; margin:0 auto; padding:26px 20px 70px; }
+
+.topbar{ display:flex; align-items:center; justify-content:space-between; margin-bottom:22px; flex-wrap:wrap; gap:12px; }
+.brand{ display:flex; align-items:center; gap:12px; }
+.brand-icon{ width:48px; height:48px; border-radius:12px; background:linear-gradient(135deg,var(--mb-blue),var(--mb-blue-dark)); display:flex; align-items:center; justify-content:center; overflow:hidden; flex-shrink:0; }
+.brand-icon img{ width:100%; height:100%; object-fit:contain; background:#fff; padding:4px; }
+.brand-icon i{ color:#fff; font-size:20px; }
+.brand h1{ font-size:19px; margin:0; font-weight:800; }
+.brand span{ font-size:12px; color:var(--mb-ink-soft); }
+
+.clock-box{ text-align:right; font-family:'Sora',sans-serif; }
+.clock-box .time{ font-weight:800; font-size:18px; }
+.clock-box .date{ font-size:12px; color:var(--mb-ink-soft); }
+
+.hero-banner{
+  background:linear-gradient(135deg,var(--mb-blue),var(--mb-blue-dark)); border-radius:var(--radius);
+  padding:28px; color:#fff; margin-bottom:22px; box-shadow:0 12px 30px rgba(25,87,224,.25);
+}
+.hero-banner h2{ font-size:22px; margin:0 0 6px; font-weight:800; }
+.hero-banner p{ margin:0; opacity:.92; font-size:13.5px; max-width:560px; }
+
+.stat-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:26px; }
+@media (max-width:900px){ .stat-grid{ grid-template-columns:repeat(2,1fr); } }
+.stat-card{ background:var(--mb-white); border:1px solid var(--mb-line); border-radius:var(--radius); padding:18px; box-shadow:var(--shadow); }
+.stat-card .ic{ width:42px; height:42px; border-radius:11px; display:flex; align-items:center; justify-content:center; color:#fff; font-size:17px; margin-bottom:12px; }
+.stat-card h3{ font-size:21px; margin:0; font-weight:800; }
+.stat-card p{ margin:2px 0 0; color:var(--mb-ink-soft); font-size:12.5px; font-weight:600; }
+
+.section-title{ font-weight:800; font-size:17px; margin-bottom:14px; }
+
+.module-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:28px; }
+@media (max-width:1000px){ .module-grid{ grid-template-columns:repeat(2,1fr); } }
+@media (max-width:600px){ .module-grid{ grid-template-columns:1fr; } }
+
+.module-card{
+  background:var(--mb-white); border:1px solid var(--mb-line); border-radius:var(--radius);
+  padding:22px; box-shadow:var(--shadow); text-decoration:none; color:var(--mb-ink);
+  display:flex; flex-direction:column; gap:10px; transition:transform .15s ease, box-shadow .15s ease;
+  position:relative; overflow:hidden;
+}
+.module-card:hover{ transform:translateY(-4px); box-shadow:0 14px 30px rgba(16,24,44,.12); color:var(--mb-ink); }
+.module-card .m-ic{ width:50px; height:50px; border-radius:14px; display:flex; align-items:center; justify-content:center; color:#fff; font-size:21px; }
+.module-card h4{ font-size:16px; font-weight:800; margin:0; }
+.module-card p{ font-size:12.5px; color:var(--mb-ink-soft); margin:0; line-height:1.5; }
+.module-card .go{ margin-top:auto; font-size:12.5px; font-weight:700; color:var(--mb-blue); display:flex; align-items:center; gap:6px; }
+.module-card .badge-count{ position:absolute; top:16px; right:16px; background:var(--mb-red); color:#fff; font-size:11px; font-weight:700; padding:3px 9px; border-radius:99px; }
+
+.mb-card{ background:var(--mb-white); border:1px solid var(--mb-line); border-radius:var(--radius); box-shadow:var(--shadow); padding:20px; }
+.activity-item{ display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:1px solid var(--mb-line); }
+.activity-item:last-child{ border-bottom:none; }
+.activity-item .a-ic{ width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; color:#fff; font-size:14px; flex-shrink:0; }
+.activity-item .a-body{ flex:1; min-width:0; }
+.activity-item .a-title{ font-size:13.5px; font-weight:700; }
+.activity-item .a-sub{ font-size:11.5px; color:var(--mb-ink-soft); }
+.activity-item .a-time{ font-size:11px; color:var(--mb-ink-soft); white-space:nowrap; }
+
+.empty-state{ text-align:center; padding:30px 10px; color:var(--mb-ink-soft); font-size:13px; }
+.empty-state i{ font-size:32px; display:block; margin-bottom:8px; color:var(--mb-line); }
+
+.btn-mb{ background:linear-gradient(135deg,var(--mb-blue),var(--mb-blue-dark)); border:none; color:#fff; font-weight:700; border-radius:10px; padding:9px 16px; font-size:13.5px; }
+.btn-mb:hover{ color:#fff; opacity:.92; }
+.btn-light-border{ background:var(--mb-white); border:1.5px solid var(--mb-line); color:var(--mb-ink); border-radius:10px; padding:9px 14px; font-size:13.5px; font-weight:600; }
+.btn-light-border:hover{ background:var(--mb-blue-light); border-color:var(--mb-blue); color:var(--mb-blue); }
+
+#dashLoader{ position:fixed; inset:0; background:var(--mb-bg); z-index:9999; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:14px; }
+.spinner{ width:48px; height:48px; border-radius:50%; border:4px solid var(--mb-blue-light); border-top-color:var(--mb-blue); animation:spin .8s linear infinite; }
+@keyframes spin{ to{ transform:rotate(360deg);} }
+</style>
+</head>
+<body>
+
+<div id="dashLoader"><div class="spinner"></div><div class="brand-font" style="font-weight:800;color:var(--mb-blue);">MAXBOXS.STORE</div></div>
+
+<div class="wrap">
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-icon" id="brandLogo"><i class="fa-solid fa-box"></i></div>
+      <div>
+        <h1 id="brandName" class="brand-font">MAXBOXS.STORE</h1>
+        <span>Dashboard Pusat &mdash; Sistem Bisnis Offline</span>
+      </div>
+    </div>
+    <div class="d-flex align-items-center gap-3">
+      <div class="clock-box">
+        <div class="time" id="clockTime">--:--:--</div>
+        <div class="date" id="clockDate">-</div>
+      </div>
+      <button class="btn btn-light-border" id="darkToggle"><i class="fa-solid fa-moon"></i></button>
+    </div>
+  </div>
+
+  <div class="hero-banner">
+    <h2>Selamat Datang di Pusat Kendali MAXBOXS.STORE</h2>
+    <p>Semua modul bisnis kamu terhubung dari sini &mdash; kasir &amp; invoice, keuangan, pengiriman paket, hingga form pesanan mandiri untuk customer. Semua data tersimpan otomatis secara offline di perangkat ini.</p>
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="ic" style="background:linear-gradient(135deg,var(--mb-blue),var(--mb-blue-dark));"><i class="fa-solid fa-receipt"></i></div>
+      <h3 id="statOrders">0</h3><p>Total Pesanan</p>
+    </div>
+    <div class="stat-card">
+      <div class="ic" style="background:linear-gradient(135deg,#17a673,#0e7a52);"><i class="fa-solid fa-wallet"></i></div>
+      <h3 id="statSaldo">Rp0</h3><p>Saldo Kas Keuangan</p>
+    </div>
+    <div class="stat-card">
+      <div class="ic" style="background:linear-gradient(135deg,#e79a1a,#b5760a);"><i class="fa-solid fa-inbox"></i></div>
+      <h3 id="statPending">0</h3><p>Pesanan Masuk Baru</p>
+    </div>
+    <div class="stat-card">
+      <div class="ic" style="background:linear-gradient(135deg,#8b5cf6,#5b34ad);"><i class="fa-solid fa-truck-fast"></i></div>
+      <h3 id="statShipping">0</h3><p>Paket Dalam Proses</p>
+    </div>
+  </div>
+
+  <div class="section-title">Modul Bisnis</div>
+  <div class="module-grid">
+    <a href="index.html" class="module-card">
+      <span class="badge-count d-none" id="badgeKasir">0</span>
+      <div class="m-ic" style="background:linear-gradient(135deg,var(--mb-blue),var(--mb-blue-dark));"><i class="fa-solid fa-cash-register"></i></div>
+      <h4>Kasir &amp; Invoice</h4>
+      <p>Buat pesanan, kelola produk &amp; customer, cetak invoice / struk thermal.</p>
+      <div class="go">Buka Modul <i class="fa-solid fa-arrow-right"></i></div>
+    </a>
+    <a href="keuangan.html" class="module-card">
+      <div class="m-ic" style="background:linear-gradient(135deg,#17a673,#0e7a52);"><i class="fa-solid fa-sack-dollar"></i></div>
+      <h4>Keuangan</h4>
+      <p>Catat pemasukan &amp; pengeluaran, laporan laba rugi, dan buku kas otomatis.</p>
+      <div class="go">Buka Modul <i class="fa-solid fa-arrow-right"></i></div>
+    </a>
+    <a href="paket.html" class="module-card">
+      <span class="badge-count d-none" id="badgePaket">0</span>
+      <div class="m-ic" style="background:linear-gradient(135deg,#8b5cf6,#5b34ad);"><i class="fa-solid fa-box-open"></i></div>
+      <h4>Paket &amp; Kurir</h4>
+      <p>Kelola pengiriman, status resi, kurir, dan cetak label paket.</p>
+      <div class="go">Buka Modul <i class="fa-solid fa-arrow-right"></i></div>
+    </a>
+    <a href="pesan.html" class="module-card" target="_blank">
+      <div class="m-ic" style="background:linear-gradient(135deg,#e79a1a,#b5760a);"><i class="fa-solid fa-file-pen"></i></div>
+      <h4>Form Pesanan Customer</h4>
+      <p>Halaman publik agar customer bisa mengisi pesanan sendiri.</p>
+      <div class="go">Buka / Bagikan <i class="fa-solid fa-arrow-up-right-from-square"></i></div>
+    </a>
+  </div>
+
+  <div class="row g-3">
+    <div class="col-lg-7">
+      <div class="mb-card">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <div class="section-title mb-0">Aktivitas Terbaru</div>
+        </div>
+        <div id="activityList"></div>
+        <div class="empty-state d-none" id="activityEmpty"><i class="fa-solid fa-clock-rotate-left"></i>Belum ada aktivitas</div>
+      </div>
+    </div>
+    <div class="col-lg-5">
+      <div class="mb-card h-100">
+        <div class="section-title">Ringkasan Cepat</div>
+        <div class="d-flex justify-content-between py-2 border-bottom" style="border-color:var(--mb-line)!important;"><span class="text-muted" style="font-size:13.5px;">Total Pendapatan (Lunas)</span><b id="qRevenue">Rp0</b></div>
+        <div class="d-flex justify-content-between py-2 border-bottom" style="border-color:var(--mb-line)!important;"><span class="text-muted" style="font-size:13.5px;">Total Pengeluaran</span><b id="qExpense">Rp0</b></div>
+        <div class="d-flex justify-content-between py-2 border-bottom" style="border-color:var(--mb-line)!important;"><span class="text-muted" style="font-size:13.5px;">Total Customer</span><b id="qCustomers">0</b></div>
+        <div class="d-flex justify-content-between py-2 border-bottom" style="border-color:var(--mb-line)!important;"><span class="text-muted" style="font-size:13.5px;">Paket Terkirim</span><b id="qDelivered">0</b></div>
+        <div class="d-flex justify-content-between py-2"><span class="text-muted" style="font-size:13.5px;">Paket Retur</span><b id="qReturn" class="text-danger">0</b></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function loadLS(key, fallback){ try{ const v = localStorage.getItem(key); return v?JSON.parse(v):fallback; }catch(e){ return fallback; } }
+function formatRupiah(n){ n = Math.round(Number(n)||0); return 'Rp'+n.toLocaleString('id-ID'); }
+function timeAgo(ts){
+  const diff = Math.floor((Date.now()-ts)/1000);
+  if(diff<60) return 'Baru saja';
+  if(diff<3600) return Math.floor(diff/60)+' menit lalu';
+  if(diff<86400) return Math.floor(diff/3600)+' jam lalu';
+  return Math.floor(diff/86400)+' hari lalu';
+}
+
+const settings = loadLS('maxbox_settings', {storeName:'MAXBOXS.STORE', logo:'', footer:''});
+const orders = loadLS('maxbox_orders', []);
+const customers = loadLS('maxbox_customers', []);
+const pendingOrders = loadLS('maxbox_pending_orders', []);
+const expenses = loadLS('maxbox_expenses', []);
+const incomeExtra = loadLS('maxbox_income_extra', []);
+const shipments = loadLS('maxbox_shipments', []);
+
+function applyBranding(){
+  document.getElementById('brandName').textContent = settings.storeName || 'MAXBOXS.STORE';
+  document.title = 'Dashboard Utama — ' + (settings.storeName || 'MAXBOXS.STORE');
+  const logo = document.getElementById('brandLogo');
+  logo.innerHTML = settings.logo ? `<img src="${settings.logo}">` : `<i class="fa-solid fa-box"></i>`;
+}
+
+function tickClock(){
+  const d = new Date();
+  document.getElementById('clockTime').textContent = d.toLocaleTimeString('id-ID');
+  document.getElementById('clockDate').textContent = d.toLocaleDateString('id-ID', {weekday:'long', day:'numeric', month:'long', year:'numeric'});
+}
+setInterval(tickClock, 1000);
+
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  document.getElementById('darkToggle').innerHTML = theme==='dark' ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
+  localStorage.setItem('maxbox_theme', JSON.stringify(theme));
+}
+document.getElementById('darkToggle').addEventListener('click', ()=>{
+  const cur = document.documentElement.getAttribute('data-theme')==='dark' ? 'light' : 'dark';
+  applyTheme(cur);
+});
+
+function renderStats(){
+  document.getElementById('statOrders').textContent = orders.length;
+
+  const salesIncome = orders.reduce((s,o)=> s + (Number(o.paidAmount)||0), 0);
+  const extraIncome = incomeExtra.reduce((s,e)=> s + (Number(e.amount)||0), 0);
+  const totalExpense = expenses.reduce((s,e)=> s + (Number(e.amount)||0), 0);
+  const saldo = salesIncome + extraIncome - totalExpense;
+  document.getElementById('statSaldo').textContent = formatRupiah(saldo);
+
+  document.getElementById('statPending').textContent = pendingOrders.length;
+  const badgeKasir = document.getElementById('badgeKasir');
+  if(pendingOrders.length>0){ badgeKasir.textContent = pendingOrders.length; badgeKasir.classList.remove('d-none'); }
+
+  const activeShipments = shipments.filter(s=> s.status!=='Terkirim' && s.status!=='Retur').length;
+  document.getElementById('statShipping').textContent = activeShipments;
+  const badgePaket = document.getElementById('badgePaket');
+  if(activeShipments>0){ badgePaket.textContent = activeShipments; badgePaket.classList.remove('d-none'); }
+
+  document.getElementById('qRevenue').textContent = formatRupiah(salesIncome + extraIncome);
+  document.getElementById('qExpense').textContent = formatRupiah(totalExpense);
+  document.getElementById('qCustomers').textContent = customers.length;
+  document.getElementById('qDelivered').textContent = shipments.filter(s=>s.status==='Terkirim').length;
+  document.getElementById('qReturn').textContent = shipments.filter(s=>s.status==='Retur').length;
+}
+
+function renderActivity(){
+  let items = [];
+  orders.forEach(o=> items.push({type:'order', time:o.createdAt, title:`Pesanan ${o.invoice}`, sub:`${o.customerName} — ${formatRupiah(o.total)}`, icon:'fa-receipt', color:'linear-gradient(135deg,#1957e0,#0f3fae)'}));
+  pendingOrders.forEach(o=> items.push({type:'pending', time:o.createdAt, title:`Pesanan masuk dari ${o.customerName}`, sub:`Ref: ${o.refCode}`, icon:'fa-inbox', color:'linear-gradient(135deg,#e79a1a,#b5760a)'}));
+  expenses.forEach(e=> items.push({type:'expense', time:e.createdAt, title:`Pengeluaran: ${e.category}`, sub:formatRupiah(e.amount), icon:'fa-arrow-trend-down', color:'linear-gradient(135deg,#e14848,#a92e2e)'}));
+  incomeExtra.forEach(e=> items.push({type:'income', time:e.createdAt, title:`Pemasukan lain: ${e.source}`, sub:formatRupiah(e.amount), icon:'fa-arrow-trend-up', color:'linear-gradient(135deg,#17a673,#0e7a52)'}));
+  shipments.forEach(s=> items.push({type:'shipment', time:s.updatedAt||s.createdAt, title:`Paket ${s.resi||'(tanpa resi)'} — ${s.status}`, sub:`${s.customerName} via ${s.kurir}`, icon:'fa-truck-fast', color:'linear-gradient(135deg,#8b5cf6,#5b34ad)'}));
+
+  items = items.filter(i=>i.time).sort((a,b)=> b.time-a.time).slice(0,10);
+  const list = document.getElementById('activityList');
+  list.innerHTML = '';
+  document.getElementById('activityEmpty').classList.toggle('d-none', items.length>0);
+  items.forEach(i=>{
+    list.insertAdjacentHTML('beforeend', `
+      <div class="activity-item">
+        <div class="a-ic" style="background:${i.color}"><i class="fa-solid ${i.icon}"></i></div>
+        <div class="a-body">
+          <div class="a-title">${i.title}</div>
+          <div class="a-sub">${i.sub}</div>
+        </div>
+        <div class="a-time">${timeAgo(i.time)}</div>
+      </div>`);
+  });
+}
+
+function init(){
+  const theme = loadLS('maxbox_theme', 'light');
+  applyTheme(theme);
+  applyBranding();
+  renderStats();
+  renderActivity();
+  tickClock();
+  setTimeout(()=>{
+    document.getElementById('dashLoader').style.opacity='0';
+    document.getElementById('dashLoader').style.transition='opacity .3s ease';
+    setTimeout(()=> document.getElementById('dashLoader').style.display='none', 300);
+  }, 400);
+}
+window.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
