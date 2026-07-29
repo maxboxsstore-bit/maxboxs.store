@@ -23,6 +23,7 @@
 }
 *{box-sizing:border-box;}
 body{ font-family:'Plus Jakarta Sans',sans-serif; background:var(--mb-bg); color:var(--mb-ink); transition:background .25s,color .25s; }
+.text-muted{ color:var(--mb-ink-soft) !important; }
 h1,h2,h3,h4,.brand-font{ font-family:'Sora',sans-serif; }
 
 .mb-shell{ display:flex; min-height:100vh; }
@@ -56,8 +57,9 @@ h1,h2,h3,h4,.brand-font{ font-family:'Sora',sans-serif; }
 .section-sub{ color:var(--mb-ink-soft); font-size:13px; margin-bottom:16px; }
 
 .table thead th{ font-size:11.5px; text-transform:uppercase; letter-spacing:.4px; color:var(--mb-ink-soft); border-bottom:2px solid var(--mb-line); font-weight:700; }
+.table, .table>:not(caption)>*>*{ background-color:transparent !important; color:var(--mb-ink); }
 .table td, .table th{ vertical-align:middle; color:var(--mb-ink); border-color:var(--mb-line); font-size:13.5px; }
-.table-hover>tbody>tr:hover>*{ background:var(--mb-blue-light); }
+.table-hover>tbody>tr:hover>*{ background:var(--mb-blue-light) !important; }
 
 .badge-status{ font-size:11px; font-weight:700; padding:5px 10px; border-radius:99px; white-space:nowrap; }
 .st-Menunggu-Pickup{ background:#fdf1de; color:var(--mb-amber); }
