@@ -256,7 +256,7 @@ function submitOrder(){
   const itemLines = items.map(it=>`- ${it.name} x${it.qty} = ${formatRupiah(it.subtotal)}`).join('%0A');
   const waText = encodeURIComponent(`Halo ${settings.storeName||'MAXBOXS.STORE'}, saya ingin memesan:%0A%0A`).replace(/%25/g,'%');
   const waMessage = `Halo ${settings.storeName||'MAXBOXS.STORE'}, saya ingin memesan (Ref: ${refCode}):%0A%0ANama: ${name}%0AWhatsApp: ${wa}%0AAlamat: ${address}%0A%0AProduk:%0A${itemLines}%0A%0AEstimasi Total: ${formatRupiah(totals.total)}%0AMetode Bayar: ${method}${note? '%0ACatatan: '+note : ''}`;
-  const waLink = settings.wa ? `https://wa.me/${settings.wa.replace(/[^0-9]/g,'')}?text=${waMessage}` : `https://wa.me/0877-7499-1692?text=${waMessage}`;
+  const waLink = settings.wa ? `https://wa.me/${settings.wa.replace(/[^0-9]/g,'')}?text=${waMessage}` : `https://wa.me/6287774991692/?text=${waMessage}`;
 
   Swal.fire({
     icon:'success',
