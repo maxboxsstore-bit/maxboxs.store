@@ -1362,7 +1362,20 @@ function setPaperSize(){
   // @page dinamis agar hasil cetak = ukuran PDF (margin 0)
   let ps = document.getElementById('pageStyle');
   if(!ps){ ps = document.createElement('style'); ps.id = 'pageStyle'; document.head.appendChild(ps); }
-  const size = currentPaper === 'a4' ? 'A4' : (currentPaper === '80' ? '80mm auto' : '58mm auto');
+  let size = 'A4';
+  if(currentPaper !== 'a4'){
+    // Chrome tidak mendukung "80mm auto" -> hitung tinggi isi invoice (sama seperti saat bikin PDF)
+    const wPx = currentPaper === '58' ? 219 : 302;
+    const wMM = currentPaper === '58' ? 58 : 80;
+    const src = document.getElementById('invoiceArea');
+    const c = src.cloneNode(true);
+    c.id = 'invoiceAreaClone';
+    c.style.cssText = 'position:fixed;top:0;left:-99999px;width:'+wPx+'px;visibility:hidden;';
+    document.body.appendChild(c);
+    const hMM = Math.ceil(c.offsetHeight * 25.4 / 96) + 4;
+    document.body.removeChild(c);
+    size = wMM+'mm '+hMM+'mm';
+  }
   ps.textContent = '@page{ size:'+size+'; margin:0; }';
 }
 function openInvoicePreview(orderId){
@@ -1426,7 +1439,7 @@ function buildInvoiceHTML(o){
     <div class="text-center" style="font-size:12.5px; color:#5b6478;">${settings.footer}</div>
   `;
 }
-function printInvoice(){ window.print(); }
+function printInvoice(){ setPaperSize(); window.print(); }
 function downloadInvoicePDF(){
   const original = document.getElementById('invoiceArea');
   const paperWidthPx = currentPaper==='58' ? 219 : currentPaper==='80' ? 302 : 793; // ~58mm/80mm/210mm @96dpi
